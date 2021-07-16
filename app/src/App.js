@@ -7,7 +7,7 @@ class App extends Component {
     this.state = {
       name: "React",
       input: "",
-      finalInput: ""
+      finalInput: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -20,7 +20,8 @@ class App extends Component {
   handleClick(event) {
     event.preventDefault();
     console.log(this.state.input);
-    this.setState({finalInput:this.state.input});
+    document.getElementById('userinput').value = '';
+    this.setState({finalInput: this.state.finalInput.concat([this.state.input])});
   }
 
   render() {
@@ -28,7 +29,7 @@ class App extends Component {
       <div>
         <label>Enter value: </label>
         <form>
-          <input type="textarea" name="textValue"
+          <input type="textarea" name="textValue" id="userinput"
             onChange={this.handleChange}
             onKeyPress={event => {
 
@@ -39,8 +40,11 @@ class App extends Component {
           <button onClick={this.handleClick}>Submit</button>
         </form>
 
-
-        <p id="resultText">{this.state.finalInput}</p>
+        <ul>
+          {this.state.finalInput.map(item => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
       </div>
     );
   }
