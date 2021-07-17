@@ -24,7 +24,7 @@ class ItemInput extends React.Component {
   render() {
     return (
       <div>
-        <label>Enter value: </label>
+        <label>{this.props.name}, enter value: </label>
         <form>
           <input type="textarea" name="textValue" id="userinput"
             onChange={this.handleChange}
