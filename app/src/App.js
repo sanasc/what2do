@@ -7,6 +7,7 @@ class App extends Component {
     super();
     this.state = {
       name: "",
+      hasName: false,
       finalInput: []
     };
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -19,24 +20,29 @@ class App extends Component {
     console.log(event.target.value);
   }
 
+  handleNameSubmit = event => {
+    this.setState({ hasName: true })
+  }
+
   receiveItemInput = currentInput => {
     this.setState({finalInput: this.state.finalInput.concat([currentInput])});
   }
 
   render() {
-    if (this.state.name.trim() === "") {
+    if (!this.state.hasName) {
       return(
         <div>
-        <label>Enter your name: </label>
-        <form>
-          <input type="text" name="usernameValue" id="usernameInput"
-            onKeyPress={event => {
-                if (event.key === 'Enter') {
-                  this.handleNameChange(event)
-                }
-              }}/>
-          <button onClick={this.handleNameChange}>Submit</button>
-        </form>
+          <label>Enter your name: </label>
+          <form>
+            <input type="text" name="usernameValue" id="usernameInput"
+              onChange={this.handleNameChange}
+              onKeyPress={event => {
+                  if (event.key === 'Enter') {
+                    this.handleNameSubmit(event)
+                  }
+                }}/>
+            <button onClick={this.handleNameSubmit}>Submit</button>
+          </form>
         </div>
       );
     } else {
