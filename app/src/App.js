@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import ItemInput from "./Components/ItemInput";
 
@@ -8,22 +7,34 @@ class App extends Component {
     this.state = {
       name: "",
       hasName: false,
-      finalInput: []
+      finalInput: [],
+      itemInputs: {}
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   handleNameChange = event => {
     event.preventDefault();
-    console.log("hello");
     this.setState({ name:event.target.value });
-    console.log(event.target.value);
   }
 
   handleNameSubmit = event => {
     this.setState({ hasName: true })
   }
 
+  resetName = () => {
+    console.log("We went back!");
+    this.setState({
+      name: "",
+      hasName: false
+    })
+  }
+
+  /*Steps:
+  1) Search through existing map
+  2) find matching movies in the parameter array
+  3) Add current (?) name to corresponding key
+  */
   receiveItemInput = currentInput => {
     this.setState({finalInput: this.state.finalInput.concat([currentInput])});
   }
@@ -51,6 +62,7 @@ class App extends Component {
           <ItemInput
             name = {this.state.name}
             receiveItemInput = {this.receiveItemInput}
+            goBack = {this.resetName}
           />
           <p>
             you've added:

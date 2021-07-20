@@ -20,7 +20,7 @@ class ItemInput extends React.Component {
     document.getElementById('userinput').value = '';
     this.props.receiveItemInput(this.state.currentInput);
   }
-
+  
   render() {
     return (
       <div>
@@ -35,6 +35,7 @@ class ItemInput extends React.Component {
               }}/>
           <button onClick={this.sendItemInput}>Submit</button>
         </form>
+        <button onClick={this.props.goBack}>Go back</button>
       </div>
     );
   }
