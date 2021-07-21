@@ -44,11 +44,6 @@ class App extends Component {
         this.state.items.set(currentInput, [this.state.name]);
       }
     }
-
-    // Print items in items to console
-    for (let [key, value] of this.state.items) {
-      console.log(key + ' = ' + value);
-    }
   }
 
   render() {
@@ -69,6 +64,10 @@ class App extends Component {
         </div>
       );
     } else {
+      var entries = [];
+      for (let [key, value] of this.state.items) {
+        entries = entries.concat([key + ": " + value, <br/>]);
+      }
       return (
         <div>
           <ItemInput
@@ -79,7 +78,9 @@ class App extends Component {
           <p>
             you've added:
           </p>
-
+          <p>
+            {entries}
+          </p>
         </div>
       );
     }
