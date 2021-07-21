@@ -8,7 +8,7 @@ class App extends Component {
       name: "",
       hasName: false,
       finalInput: [],
-      itemInputs: {}
+      items: new Map()
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
@@ -23,20 +23,32 @@ class App extends Component {
   }
 
   resetName = () => {
-    console.log("We went back!");
     this.setState({
       name: "",
       hasName: false
     })
   }
 
-  /*Steps:
-  1) Search through existing map
-  2) find matching movies in the parameter array
-  3) Add current (?) name to corresponding key
-  */
   receiveItemInput = currentInput => {
     this.setState({finalInput: this.state.finalInput.concat([currentInput])});
+
+    if (this.state.items.size === 0) {
+      this.state.items.set(currentInput, [this.state.name]);
+    } else {
+      if (this.state.items.has(currentInput)) {
+        this.state.items.set(
+          currentInput,
+          this.state.items.get(currentInput).concat([this.state.name])
+        );
+      } else {
+        this.state.items.set(currentInput, [this.state.name]);
+      }
+    }
+
+    // Print items in items to console
+    for (let [key, value] of this.state.items) {
+      console.log(key + ' = ' + value);
+    }
   }
 
   render() {
@@ -66,16 +78,20 @@ class App extends Component {
           />
           <p>
             you've added:
-            </p>
-            <ul>
-            {this.state.finalInput.map(item => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+          </p>
+
         </div>
       );
     }
   }
 }
+
+/*
+<ul>
+  {this.state.finalInput.map(item => (
+    <li key={item}>{item}</li>
+  ))}
+</ul>
+*/
 
 export default App;
