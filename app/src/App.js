@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ItemInput from "./Components/ItemInput";
+import CurrentList from "./Components/CurrentList";
 
 class App extends Component {
   constructor() {
@@ -64,10 +65,6 @@ class App extends Component {
         </div>
       );
     } else {
-      var entries = [];
-      for (let [key, value] of this.state.items) {
-        entries = entries.concat([key + ": " + value, <br/>]);
-      }
       return (
         <div>
           <ItemInput
@@ -75,24 +72,13 @@ class App extends Component {
             receiveItemInput = {this.receiveItemInput}
             goBack = {this.resetName}
           />
-          <p>
-            you've added:
-          </p>
-          <p>
-            {entries}
-          </p>
+          <CurrentList 
+            items = {this.state.items}
+          />
         </div>
       );
     }
   }
 }
-
-/*
-<ul>
-  {this.state.finalInput.map(item => (
-    <li key={item}>{item}</li>
-  ))}
-</ul>
-*/
 
 export default App;
