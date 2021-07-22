@@ -53,7 +53,7 @@ class App extends Component {
       return(
         <div className="homepage">
           <p>Hello!</p>
-          <label className="App-header">Enter your name: </label>
+          <label>Enter your name: </label>
           <form>
             <input type="text" name="usernameValue" id="usernameInput"
               onChange={this.handleNameChange}
