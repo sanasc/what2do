@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
 
@@ -50,8 +51,9 @@ class App extends Component {
   render() {
     if (!this.state.hasName) {
       return(
-        <div>
-          <label>Enter your name: </label>
+        <div className="homepage">
+          <p>Hello!</p>
+          <label className="App-header">Enter your name: </label>
           <form>
             <input type="text" name="usernameValue" id="usernameInput"
               onChange={this.handleNameChange}
@@ -72,7 +74,7 @@ class App extends Component {
             receiveItemInput = {this.receiveItemInput}
             goBack = {this.resetName}
           />
-          <CurrentList 
+          <CurrentList
             items = {this.state.items}
           />
         </div>

@@ -20,7 +20,7 @@ class ItemInput extends React.Component {
     document.getElementById('userinput').value = '';
     this.props.receiveItemInput(this.state.currentInput);
   }
-  
+
   render() {
     return (
       <div>
