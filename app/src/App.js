@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
-import firebase from './firebase';
+import firebase from './firebase.js';
 
 class App extends Component {
   constructor() {
@@ -23,6 +23,19 @@ class App extends Component {
 
   handleNameSubmit = event => {
     this.setState({ hasName: true })
+
+    //firebase
+    const itemsRef = firebase.database().ref('session/session1/users');
+    itemsRef.once("value", snapshot => {
+      if (!snapshot.exists()) {
+        //no user present in session yet -> create "users" field and add current user
+        
+      } else {
+        //if snapshot exists, get list of users to check for duplicates
+        
+      }
+    }) 
+    
   }
 
   resetName = () => {
