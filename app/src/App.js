@@ -24,18 +24,24 @@ class App extends Component {
   handleNameSubmit = event => {
     this.setState({ hasName: true })
 
+    firebase.database().ref('session').set({
+      test: test
+    });
     //firebase
-    const itemsRef = firebase.database().ref('session/session1/users');
-    itemsRef.once("value", snapshot => {
-      if (!snapshot.exists()) {
-        //no user present in session yet -> create "users" field and add current user
-        
-      } else {
-        //if snapshot exists, get list of users to check for duplicates
-        
-      }
-    }) 
-    
+    // const itemsRef = firebase.database().ref(`session/session1/users`);
+    // itemsRef.once("value", snapshot => {
+    //   if (!snapshot.exists()) {
+    //     //no user present in session yet -> create "users" field and add current user
+    //     var username = this.state.name;
+    //     firebase.database().ref(`session/session1`).set({
+    //       users: username
+    //     });
+    //   } else {
+    //     //if snapshot exists, get list of users to check for duplicates
+    //
+    //   }
+    // })
+
   }
 
   resetName = () => {
