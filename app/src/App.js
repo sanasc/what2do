@@ -3,6 +3,7 @@ import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
 import firebase from './firebase.js';
+import "firebase/database";
 
 class App extends Component {
   constructor() {
@@ -24,23 +25,34 @@ class App extends Component {
   handleNameSubmit = event => {
     this.setState({ hasName: true })
 
-    firebase.database().ref('session').set({
-      test: test
-    });
     //firebase
-    // const itemsRef = firebase.database().ref(`session/session1/users`);
-    // itemsRef.once("value", snapshot => {
-    //   if (!snapshot.exists()) {
-    //     //no user present in session yet -> create "users" field and add current user
-    //     var username = this.state.name;
-    //     firebase.database().ref(`session/session1`).set({
-    //       users: username
-    //     });
-    //   } else {
-    //     //if snapshot exists, get list of users to check for duplicates
-    //
-    //   }
-    // })
+    const itemsRef = firebase.database().ref(`session/session1/users`);
+    itemsRef.once("value", snapshot => {
+      var username = this.state.name;
+
+      if (!snapshot.exists()) {
+         //no user present in session yet -> create "users" field and add current user
+        firebase.database().ref(`session/session1`).set({
+          users: username
+        });
+
+      } else {
+        // snapshot exists: get list of users to check for duplicates
+        var currList = snapshot.val();
+        var duplicateCheck = { " " + username + " "}
+
+        // Check if there already exists the same name
+        if (currList.includes(duplicateCheck)) {
+          // TODO: Duplicate names so enter as duplicate name ( do nothing? )
+
+        } else {
+          currList = { currList + ", " + username };
+          firebase.database().ref(`session/session1`).set({
+            users: currList
+          });
+        }
+      }
+     })
 
   }
 
