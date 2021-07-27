@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
+import firebase from './firebase';
 
 class App extends Component {
   constructor() {
