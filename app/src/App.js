@@ -25,7 +25,7 @@ class App extends Component {
   handleNameSubmit = event => {
     this.setState({ hasName: true })
 
-    //firebase
+    // add name to firebase
     const itemsRef = firebase.database().ref(`session/session1/users`);
     itemsRef.once("value", snapshot => {
       var username = this.state.name;
@@ -39,14 +39,14 @@ class App extends Component {
       } else {
         // snapshot exists: get list of users to check for duplicates
         var currList = snapshot.val();
-        var duplicateCheck = { " " + username + " "}
+        var duplicateCheck = " " + username + " ";
 
         // Check if there already exists the same name
         if (currList.includes(duplicateCheck)) {
           // TODO: Duplicate names so enter as duplicate name ( do nothing? )
 
         } else {
-          currList = { currList + ", " + username };
+          currList = currList + ', ' + username;
           firebase.database().ref(`session/session1`).set({
             users: currList
           });
