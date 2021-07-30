@@ -3,7 +3,6 @@ import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
 import firebase from './firebase.js';
-import "firebase/database";
 
 class App extends Component {
   constructor() {
@@ -35,7 +34,6 @@ class App extends Component {
         firebase.database().ref(`session/session1`).set({
           users: username
         });
-
       } else {
         // snapshot exists: get list of users to check for duplicates
         var currList = snapshot.val();
