@@ -32,7 +32,6 @@ class App extends Component {
         console.log("Document data:", doc.data());
         if (doc.data().users.includes(this.state.name)) {
           // Potentially special treatment for returning users (frontend things)
-
         }
 
         // This method only adds elements not already present
