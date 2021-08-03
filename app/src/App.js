@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
-import firebase from './firebase.js';
+import firebase from './firebase';
 
 class App extends Component {
   constructor() {
@@ -23,34 +23,30 @@ class App extends Component {
 
   handleNameSubmit = event => {
     this.setState({ hasName: true })
+    var username = this.state.name;
 
-    // add name to firebase
-    const itemsRef = firebase.database().ref(`session/session1/users`);
-    itemsRef.once("value", snapshot => {
-      var username = this.state.name;
+    var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
 
-      if (!snapshot.exists()) {
-         //no user present in session yet -> create "users" field and add current user
-        firebase.database().ref(`session/session1`).set({
-          users: username
-        });
-      } else {
-        // snapshot exists: get list of users to check for duplicates
-        var currList = snapshot.val();
-        var duplicateCheck = " " + username + " ";
+    docRef.get().then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        if (doc.data().users.includes(this.state.name)) {
+          // Potentially special treatment for returning users (frontend things)
 
-        // Check if there already exists the same name
-        if (currList.includes(duplicateCheck)) {
-          // TODO: Duplicate names so enter as duplicate name ( do nothing? )
-
-        } else {
-          currList = currList + ', ' + username;
-          firebase.database().ref(`session/session1`).set({
-            users: currList
-          });
         }
+
+        // This method only adds elements not already present
+        docRef.update({
+          users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+        });
+
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
       }
-     })
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
 
   }
 
