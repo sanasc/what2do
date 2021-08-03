@@ -71,6 +71,37 @@ class App extends Component {
         this.state.items.set(currentInput, [this.state.name]);
       }
     }
+
+    // firebase
+    var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+                                     .collection("items").doc(currentInput);
+    docRef.get().then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+
+        docRef.update({
+          votes: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+        });
+
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+
+        // Create the document?
+        firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+                            .collection("items").doc(currentInput).set({
+                              votes: [ this.state.name ]
+                            })
+        .then(() => {
+            console.log("Document successfully written!");
+        })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
   }
 
   render() {
