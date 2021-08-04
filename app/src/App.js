@@ -80,7 +80,8 @@ class App extends Component {
         console.log("Document data:", doc.data());
 
         docRef.update({
-          votes: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+          votes: firebase.firestore.FieldValue.arrayUnion(this.state.name),
+          count: firebase.firestore.FieldValue.increment(1)
         });
 
       } else {
@@ -90,7 +91,8 @@ class App extends Component {
         // Create the document?
         firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
                             .collection("items").doc(currentInput).set({
-                              votes: [ this.state.name ]
+                              votes: [ this.state.name ],
+                              count: 1
                             })
         .then(() => {
             console.log("Document successfully written!");
