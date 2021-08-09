@@ -30,6 +30,7 @@ class CurrentList extends React.Component {
           isLoaded: true
         })
       });
+      
       return (
         <div>
           <p>
@@ -41,15 +42,19 @@ class CurrentList extends React.Component {
         </div>
       )
     } else {
+      const displayItems = [];
+      for (var i = 0; i < this.state.entries.length; i++) {
+        displayItems.push(<li>{this.state.entries[i]} - {this.state.voteCount[i]} </li>);
+      }
+
       return (
         <div>
           <p>
             Current Movies:
             <br />
-            {this.state.entries.map(item => {
-              return <li>{item}</li>
-            })}
-            
+            <ul>
+              {displayItems}
+            </ul>
           </p>
         </div>
       )
