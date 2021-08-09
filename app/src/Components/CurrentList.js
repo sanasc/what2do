@@ -12,7 +12,7 @@ class CurrentList extends React.Component {
   }
 
   render() {
-    
+
     if (!this.state.isLoaded) {
       var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
       db.collection("items").orderBy("count", "desc").get().then((querySnapshot) => {
@@ -41,15 +41,14 @@ class CurrentList extends React.Component {
         </div>
       )
     } else {
-      //   for (let [key, value] of this.props.items) {
-      //     entries = entries.concat([key + ": " + value, <br/>]);
-      // }
       return (
         <div>
           <p>
             Current Movies:
             <br />
-            {this.state.entries}
+            {this.state.entries.map(item => {
+              return <li>{item}</li>
+            })}
             
           </p>
         </div>
