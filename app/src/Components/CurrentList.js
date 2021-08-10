@@ -12,9 +12,8 @@ class CurrentList extends React.Component {
   }
 
   render() {
-
+    var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
     if (!this.state.isLoaded) {
-      var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
       db.collection("items").orderBy("count", "desc").get().then((querySnapshot) => {
         var localEntries = [];
         var localVoteCount = []; 
@@ -30,7 +29,7 @@ class CurrentList extends React.Component {
           isLoaded: true
         })
       });
-      
+
       return (
         <div>
           <p>
@@ -42,9 +41,18 @@ class CurrentList extends React.Component {
         </div>
       )
     } else {
-      const displayItems = [];
+      // db.collection("items").orderBy("count", "desc").get().then(querySnapshot => {
+      //   let changes = querySnapshot.docChanges();
+      //   console.log("Made it into the snapshot portion of the else statement");
+      //   if (changes[0].type == 'added' || changes[0].type == 'removed') {
+      //     this.setState({isLoaded: false});
+      //     console.log("isLoaded is false!");
+      //   }
+      // })
+
+      var displayItems = [];
       for (var i = 0; i < this.state.entries.length; i++) {
-        displayItems.push(<li>{this.state.entries[i]} - {this.state.voteCount[i]} </li>);
+        displayItems.push(<li>{this.state.entries[i]} - {this.state.voteCount[i]} votes </li>);
       }
 
       return (
