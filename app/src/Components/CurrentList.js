@@ -61,8 +61,6 @@ class CurrentList extends React.Component {
       )
     }
   }
-
-
 }
 
 export default CurrentList;
