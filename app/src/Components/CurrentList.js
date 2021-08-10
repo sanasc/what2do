@@ -41,15 +41,16 @@ class CurrentList extends React.Component {
         </div>
       )
     } else {
-      // db.collection("items").orderBy("count", "desc").get().then(querySnapshot => {
-      //   let changes = querySnapshot.docChanges();
-      //   console.log("Made it into the snapshot portion of the else statement");
-      //   if (changes[0].type == 'added' || changes[0].type == 'removed') {
-      //     this.setState({isLoaded: false});
-      //     console.log("isLoaded is false!");
-      //   }
-      // })
-
+      // db.collection("items").get().then((snapshot) => {
+      //   snapshot.docChanges().forEach((change) => {
+      //     if (change.type === "added" || change.type === "modified") {
+      //       this.setState({isLoaded: false});
+      //       console.log("isLoaded is false!");
+      //       return "";
+      //     }
+      //   });
+      // });
+        
       var displayItems = [];
       for (var i = 0; i < this.state.entries.length; i++) {
         displayItems.push(<li>{this.state.entries[i]} - {this.state.voteCount[i]} votes </li>);
@@ -68,6 +69,10 @@ class CurrentList extends React.Component {
       )
     }
   }
+
+  
 }
+
+
 
 export default CurrentList;
