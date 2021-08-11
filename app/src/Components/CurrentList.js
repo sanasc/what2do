@@ -24,9 +24,6 @@ class CurrentList extends React.Component {
           localEntries = localEntries.concat(doc.id);
           localVoteCount = localVoteCount.concat(doc.data().count);
           localUserVotes = localUserVotes.concat(doc.data().votes.includes(this.props.username));
-          console.log(doc.data().votes.includes(this.props.username));
-          console.log(doc.data().votes);
-          console.log(this.props.username);
       });
       this.setState({
         entries: localEntries,
