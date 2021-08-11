@@ -7,6 +7,7 @@ class CurrentList extends React.Component {
     this.state = {
       entries: [],
       voteCount: [],
+      didVote: [],
       isLoaded: false
     }
   }
@@ -16,15 +17,21 @@ class CurrentList extends React.Component {
     db.collection("items").orderBy("count", "desc").onSnapshot((querySnapshot) => {
       var localEntries = [];
       var localVoteCount = [];
+      var localUserVotes = [];
       querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data().count);
           localEntries = localEntries.concat(doc.id);
           localVoteCount = localVoteCount.concat(doc.data().count);
+          localUserVotes = localUserVotes.concat(doc.data().votes.includes(this.props.username));
+          console.log(doc.data().votes.includes(this.props.username));
+          console.log(doc.data().votes);
+          console.log(this.props.username);
       });
       this.setState({
         entries: localEntries,
         voteCount: localVoteCount,
+        didVote: localUserVotes,
         isLoaded: true
       })
     });
@@ -45,7 +52,7 @@ class CurrentList extends React.Component {
     } else {
       var displayItems = [];
       for (var i = 0; i < this.state.entries.length; i++) {
-        displayItems.push(<li>{this.state.entries[i]} - {this.state.voteCount[i]} votes </li>);
+        displayItems.push(<li>{ this.state.entries[i] }{ this.state.didVote[i] ? "*" : "" } -  { this.state.voteCount[i] } votes </li>);
       }
 
       return (

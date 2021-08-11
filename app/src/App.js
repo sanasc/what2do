@@ -133,7 +133,7 @@ class App extends Component {
             goBack = {this.resetName}
           />
           <CurrentList
-            items = {this.state.items}
+            username = {this.state.name}
           />
         </div>
       );
