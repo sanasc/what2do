@@ -5,7 +5,6 @@ class CurrentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      map: [],
       entries: [],
       voteCount: [],
       didVote: [],
@@ -20,7 +19,6 @@ class CurrentList extends React.Component {
       var localEntries = [];
       var localVoteCount = [];
       var localUserVotes = [];
-
       querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           console.log(doc.id, " => ", doc.data().count);
@@ -29,7 +27,6 @@ class CurrentList extends React.Component {
           localUserVotes = localUserVotes.concat(doc.data().votes.includes(this.props.username));
       });
       this.setState({
-
         entries: localEntries,
         voteCount: localVoteCount,
         didVote: localUserVotes,
