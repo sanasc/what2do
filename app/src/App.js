@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
+import firebase from './firebase';
 
 class App extends Component {
   constructor() {
@@ -22,6 +23,30 @@ class App extends Component {
 
   handleNameSubmit = event => {
     this.setState({ hasName: true })
+    var username = this.state.name;
+
+    var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+
+    docRef.get().then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+        if (doc.data().users.includes(this.state.name)) {
+          // Potentially special treatment for returning users (frontend things)
+        }
+
+        // This method only adds elements not already present
+        docRef.update({
+          users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+        });
+
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+
   }
 
   resetName = () => {
@@ -46,6 +71,39 @@ class App extends Component {
         this.state.items.set(currentInput, [this.state.name]);
       }
     }
+
+    // firebase
+    var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+                                     .collection("items").doc(currentInput);
+    docRef.get().then((doc) => {
+      if (doc.exists) {
+        console.log("Document data:", doc.data());
+
+        docRef.update({
+          votes: firebase.firestore.FieldValue.arrayUnion(this.state.name),
+          count: firebase.firestore.FieldValue.increment(1)
+        });
+
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+
+        // Create the document?
+        firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+                            .collection("items").doc(currentInput).set({
+                              votes: [ this.state.name ],
+                              count: 1
+                            })
+        .then(() => {
+            console.log("Document successfully written!");
+        })
+        .catch((error) => {
+            console.error("Error writing document: ", error);
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
   }
 
   render() {
@@ -75,7 +133,7 @@ class App extends Component {
             goBack = {this.resetName}
           />
           <CurrentList
-            items = {this.state.items}
+            username = {this.state.name}
           />
         </div>
       );
