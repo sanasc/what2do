@@ -36,17 +36,18 @@ class CurrentList extends React.Component {
   }
 
   deleteVote(e) {
-    console.log(e.target.id);
     var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+    var docName = e.target.id;
+    console.log("Deleting", docName);
 
-    db.collection("items").doc(e.target.id).update({
+    db.collection("items").doc(docName).update({
       count: firebase.firestore.FieldValue.increment(-1),
       votes: firebase.firestore.FieldValue.arrayRemove(this.props.username)
     });
 
-    db.collection("items").doc(e.target.id).get().then((doc) => {
-      if (doc.data().count == 0) {
-        db.collection("items").doc(e.target.id).delete().then(() => {
+    db.collection("items").doc(docName).get().then((doc) => {
+      if (doc.data().count === 0) {
+        db.collection("items").doc(docName).delete().then(() => {
           console.log("Document successfully deleted!");
         }).catch((error) => {
           console.error("Error removing document: ", error);

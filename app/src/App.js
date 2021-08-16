@@ -23,7 +23,6 @@ class App extends Component {
 
   handleNameSubmit = event => {
     this.setState({ hasName: true })
-    var username = this.state.name;
 
     var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
 
