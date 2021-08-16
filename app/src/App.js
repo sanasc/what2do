@@ -78,10 +78,12 @@ class App extends Component {
       if (doc.exists) {
         console.log("Document data:", doc.data());
 
-        docRef.update({
-          votes: firebase.firestore.FieldValue.arrayUnion(this.state.name),
-          count: firebase.firestore.FieldValue.increment(1)
-        });
+        if (!doc.data().votes.includes(this.state.name)) {
+          docRef.update({
+            votes: firebase.firestore.FieldValue.arrayUnion(this.state.name),
+            count: firebase.firestore.FieldValue.increment(1)
+          });
+        }
 
       } else {
         // doc.data() will be undefined in this case
