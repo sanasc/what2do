@@ -10,8 +10,7 @@ class App extends Component {
     this.state = {
       name: "",
       hasName: false,
-      finalInput: [],
-      items: new Map()
+      finalInput: []
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
@@ -57,19 +56,6 @@ class App extends Component {
 
   receiveItemInput = currentInput => {
     this.setState({finalInput: this.state.finalInput.concat([currentInput])});
-
-    if (this.state.items.size === 0) {
-      this.state.items.set(currentInput, [this.state.name]);
-    } else {
-      if (this.state.items.has(currentInput)) {
-        this.state.items.set(
-          currentInput,
-          this.state.items.get(currentInput).concat([this.state.name])
-        );
-      } else {
-        this.state.items.set(currentInput, [this.state.name]);
-      }
-    }
 
     // firebase
     var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
