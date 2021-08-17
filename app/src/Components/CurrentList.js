@@ -58,6 +58,10 @@ class CurrentList extends React.Component {
     });
   }
 
+  addVote(e) {
+
+  }
+
   render() {
     if (!this.state.isLoaded) {
       return (
@@ -70,17 +74,17 @@ class CurrentList extends React.Component {
         </div>
       )
     } else {
-      // <i className="fas fa-times"></i>
       var displayItems = [];
       for (var i = 0; i < this.state.entries.length; i++) {
         var itemName = this.state.entries[i];
-        displayItems.push(<li id={i}>{ itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] ? <button id={itemName} onClick={this.deleteVote} > Delete </button> : "" } </li>);
+        displayItems.push(<li id={i}>{ itemName } - { this.state.voteCount[i] } votes
+                          { this.state.didVote[i] ?
+                              <button id={itemName} onClick={this.deleteVote} > Delete </button>
+                              : <button id={itemName} onClick={this.addVote} > Vote </button> } </li>);
       }
 
       return (
         <div>
-
-
           <p>
             Current Movies:
             <br />
