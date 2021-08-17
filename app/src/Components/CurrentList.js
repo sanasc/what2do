@@ -1,5 +1,7 @@
 import React from 'react';
 import firebase from '../firebase';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
 
 class CurrentList extends React.Component {
   constructor(props) {
@@ -64,19 +66,21 @@ class CurrentList extends React.Component {
             Current Movies:
             <br />
             Loading...
-
           </p>
         </div>
       )
     } else {
+      // <i className="fas fa-times"></i>
       var displayItems = [];
       for (var i = 0; i < this.state.entries.length; i++) {
         var itemName = this.state.entries[i];
-        displayItems.push(<li id={i}>{ itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] ? <button id={itemName} onClick={this.deleteVote} >Delete</button> : "" } </li>);
+        displayItems.push(<li id={i}>{ itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] ? <button id={itemName} onClick={this.deleteVote} > Delete </button> : "" } </li>);
       }
 
       return (
         <div>
+
+
           <p>
             Current Movies:
             <br />
