@@ -7,11 +7,22 @@ class UserList extends React.Component {
     this.state = {
       users: []
     }
+    this.currentUserExist = this.currentUserExist.bind(this);
   }
 
   componentDidMount() {
     var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
     
+    // while (!this.currentUserExist()) {
+    //   setTimeout(() => {
+    //     console.log("DELAY in progress");
+    //    }, 5000);
+       
+    //   console.log("Waited 5s");
+    // }
+
+    this.currentUserExist();
+    console.log("after currentUserExist()");
     db.get().then((doc) => {
       var localUsers = [];
       doc.data().users.forEach((user) => {
@@ -23,8 +34,22 @@ class UserList extends React.Component {
     });
   }
 
+  currentUserExist() {
+    var foundUser = false; 
+    while (!foundUser) {
+      setTimeout(() => {
+      }, 1000);
+      
+      var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+      db.get().then((doc) => {
+        foundUser = doc.data().users.includes(this.props.username);
+      })
+    }
+    console.log("Ended WHILE loop");
+  }
 
   render() {
+    
     var displayUsers = [];
     for (var i = 0; i < this.state.users.length; i++) {
       var username = this.state.users[i];

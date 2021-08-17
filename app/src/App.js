@@ -121,8 +121,10 @@ class App extends Component {
             goBack = {this.resetName}
           />
 
-          <UserList/>
-          
+          <UserList
+            username = {this.state.name}
+          />
+
           <CurrentList
             username = {this.state.name}
             receiveItemInput = {this.receiveItemInput}
