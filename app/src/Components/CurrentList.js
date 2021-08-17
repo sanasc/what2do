@@ -13,6 +13,7 @@ class CurrentList extends React.Component {
       isLoaded: false
     }
     this.deleteVote = this.deleteVote.bind(this);
+    this.addVote = this.addVote.bind(this);
   }
 
   componentDidMount() {
@@ -59,7 +60,10 @@ class CurrentList extends React.Component {
   }
 
   addVote(e) {
-
+    var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+    var docName = e.target.id;
+    console.log("Adding vote", docName);
+    this.props.receiveItemInput(docName);
   }
 
   render() {
@@ -77,10 +81,13 @@ class CurrentList extends React.Component {
       var displayItems = [];
       for (var i = 0; i < this.state.entries.length; i++) {
         var itemName = this.state.entries[i];
-        displayItems.push(<li id={i}>{ itemName } - { this.state.voteCount[i] } votes
-                          { this.state.didVote[i] ?
-                              <button id={itemName} onClick={this.deleteVote} > Delete </button>
-                              : <button id={itemName} onClick={this.addVote} > Vote </button> } </li>);
+        displayItems.push(
+          <li id={i}>
+            { itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] ?
+              <button id={itemName} onClick={this.deleteVote} > Delete </button>
+              : <button id={itemName} onClick={this.addVote} > Vote </button> } 
+          </li>
+        );
       }
 
       return (

@@ -135,6 +135,7 @@ class App extends Component {
           />
           <CurrentList
             username = {this.state.name}
+            receiveItemInput = {this.receiveItemInput}
           />
         </div>
       );
