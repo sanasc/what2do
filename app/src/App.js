@@ -3,6 +3,7 @@ import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
 import firebase from './firebase';
+import UserList from "./Components/UserList";
 
 class App extends Component {
   constructor() {
@@ -119,6 +120,9 @@ class App extends Component {
             receiveItemInput = {this.receiveItemInput}
             goBack = {this.resetName}
           />
+
+          <UserList/>
+          
           <CurrentList
             username = {this.state.name}
             receiveItemInput = {this.receiveItemInput}
