@@ -33,7 +33,7 @@ class App extends Component {
         if (doc.data().users.includes(this.state.name)) {
           // Potentially special treatment for returning users (frontend things)
         }
-  
+
         // This method only adds elements not already present
         return docRef.update({
           users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
@@ -44,12 +44,7 @@ class App extends Component {
       }
     }
 
-    docGet().then((data) => {
-      // this.setState({
-      //   usersUpdated: true
-      // });
-      //console.log(data);  //data is undefined here
-    });
+    docGet();
 
   }
 

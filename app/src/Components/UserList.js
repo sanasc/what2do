@@ -11,12 +11,12 @@ class UserList extends React.Component {
   }
 
   componentDidMount() {
-    
+
   }
 
   updateUserList() {
     var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
-    
+
     db.get().then((doc) => {
       var localUsers = [];
       doc.data().users.forEach((user) => {
@@ -42,15 +42,14 @@ class UserList extends React.Component {
         );
       }
       return (
-          <div>
-              <p>
-              Users in current session:
-              <br />
-                <ul>
-                  {displayUsers}
-                </ul>
-              </p>
-          </div>
+        <div>
+          <p>
+            Users in current session:
+          </p>
+          <ul>
+            {displayUsers}
+          </ul>
+        </div>
       )
   }
 

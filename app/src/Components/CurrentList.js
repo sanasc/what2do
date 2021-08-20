@@ -85,7 +85,7 @@ class CurrentList extends React.Component {
           <li id={i}>
             { itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] ?
               <button id={itemName} onClick={this.deleteVote} > Delete </button>
-              : <button id={itemName} onClick={this.addVote} > Vote </button> } 
+              : <button id={itemName} onClick={this.addVote} > Vote </button> }
           </li>
         );
       }
@@ -94,11 +94,10 @@ class CurrentList extends React.Component {
         <div>
           <p>
             Current Items:
-            <br />
-            <ul>
-              {displayItems}
-            </ul>
           </p>
+          <ul>
+            {displayItems}
+          </ul>
         </div>
       )
     }
