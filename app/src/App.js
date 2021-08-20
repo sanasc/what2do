@@ -11,7 +11,8 @@ class App extends Component {
     this.state = {
       name: "",
       hasName: false,
-      finalInput: []
+      finalInput: [],
+      usersUpdated: true
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
@@ -26,32 +27,70 @@ class App extends Component {
 
     var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
 
-    docRef.get().then((doc) => {
+    const docGet = async () => {
+      var doc = await docRef.get();
       if (doc.exists) {
         console.log("Document data:", doc.data());
         if (doc.data().users.includes(this.state.name)) {
           // Potentially special treatment for returning users (frontend things)
         }
-
+  
         // This method only adds elements not already present
-        docRef.update({
+        
+        return docRef.update({
           users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
         });
-
+        
+        
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
       }
-    }).catch((error) => {
-      console.log("Error getting document:", error);
+    }
+
+    docGet().then((data) => {
+      // this.setState({
+      //   usersUpdated: true
+      // });
+      //console.log(data);  //data is undefined here
     });
+
+     
+    
+
+
+    // docRef.get().then((doc) => {
+    //   if (doc.exists) {
+    //     console.log("Document data:", doc.data());
+    //     if (doc.data().users.includes(this.state.name)) {
+    //       // Potentially special treatment for returning users (frontend things)
+    //     }
+
+    //     // This method only adds elements not already present
+    //     docRef.update({
+    //       users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+    //     }).then(() => {
+    //       this.setState({
+    //         usersUpdated: true
+    //       })
+    //       console.log("User list updated");
+    //     });
+
+    //   } else {
+    //     // doc.data() will be undefined in this case
+    //     console.log("No such document!");
+    //   }
+    // }).catch((error) => {
+    //   console.log("Error getting document:", error);
+    // });
 
   }
 
   resetName = () => {
     this.setState({
       name: "",
-      hasName: false
+      hasName: false,
+      usersUpdated: true
     })
   }
 
@@ -121,8 +160,11 @@ class App extends Component {
             goBack = {this.resetName}
           />
 
-          <UserList/>
-          
+          <UserList
+            username = {this.state.name}
+            usersUpdated = {this.state.usersUpdated}
+          />
+
           <CurrentList
             username = {this.state.name}
             receiveItemInput = {this.receiveItemInput}
