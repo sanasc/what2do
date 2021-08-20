@@ -11,8 +11,7 @@ class App extends Component {
     this.state = {
       name: "",
       hasName: false,
-      finalInput: [],
-      usersUpdated: true
+      finalInput: []
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
@@ -36,12 +35,9 @@ class App extends Component {
         }
   
         // This method only adds elements not already present
-        
         return docRef.update({
           users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
         });
-        
-        
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
@@ -55,42 +51,12 @@ class App extends Component {
       //console.log(data);  //data is undefined here
     });
 
-     
-    
-
-
-    // docRef.get().then((doc) => {
-    //   if (doc.exists) {
-    //     console.log("Document data:", doc.data());
-    //     if (doc.data().users.includes(this.state.name)) {
-    //       // Potentially special treatment for returning users (frontend things)
-    //     }
-
-    //     // This method only adds elements not already present
-    //     docRef.update({
-    //       users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
-    //     }).then(() => {
-    //       this.setState({
-    //         usersUpdated: true
-    //       })
-    //       console.log("User list updated");
-    //     });
-
-    //   } else {
-    //     // doc.data() will be undefined in this case
-    //     console.log("No such document!");
-    //   }
-    // }).catch((error) => {
-    //   console.log("Error getting document:", error);
-    // });
-
   }
 
   resetName = () => {
     this.setState({
       name: "",
-      hasName: false,
-      usersUpdated: true
+      hasName: false
     })
   }
 
@@ -162,7 +128,6 @@ class App extends Component {
 
           <UserList
             username = {this.state.name}
-            usersUpdated = {this.state.usersUpdated}
           />
 
           <CurrentList

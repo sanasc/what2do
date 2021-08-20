@@ -71,7 +71,7 @@ class CurrentList extends React.Component {
       return (
         <div>
           <p>
-            Current Movies:
+            Current Items:
             <br />
             Loading...
           </p>
@@ -93,7 +93,7 @@ class CurrentList extends React.Component {
       return (
         <div>
           <p>
-            Current Movies:
+            Current Items:
             <br />
             <ul>
               {displayItems}
