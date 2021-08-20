@@ -26,8 +26,7 @@ class App extends Component {
 
     var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
 
-    const docGet = async () => {
-      var doc = await docRef.get();
+    docRef.get().then((doc) => {
       if (doc.exists) {
         console.log("Document data:", doc.data());
         if (doc.data().users.includes(this.state.name)) {
@@ -42,10 +41,7 @@ class App extends Component {
         // doc.data() will be undefined in this case
         console.log("No such document!");
       }
-    }
-
-    docGet();
-
+    });
   }
 
   resetName = () => {

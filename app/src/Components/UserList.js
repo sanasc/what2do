@@ -7,50 +7,41 @@ class UserList extends React.Component {
     this.state = {
       users: []
     }
-    this.updateUserList = this.updateUserList.bind(this);
   }
 
   componentDidMount() {
-
+    firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+        .onSnapshot((doc) => {
+          var localUsers = [];
+          doc.data().users.forEach((user) => {
+            localUsers = localUsers.concat(user);
+          })
+          this.setState({
+            users: localUsers
+          })
+        });
   }
-
-  updateUserList() {
-    var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
-
-    db.get().then((doc) => {
-      var localUsers = [];
-      doc.data().users.forEach((user) => {
-        localUsers = localUsers.concat(user);
-      })
-      this.setState({
-        users: localUsers
-      })
-    });
-
-  }
-
 
   render() {
-    this.updateUserList();
-      var displayUsers = [];
-      for (var i = 0; i < this.state.users.length; i++) {
-        var username = this.state.users[i];
-        displayUsers.push(
-          <li id={i}>
-            {username}
-          </li>
-        );
-      }
-      return (
-        <div>
-          <p>
-            Users in current session:
-          </p>
-          <ul>
-            {displayUsers}
-          </ul>
-        </div>
-      )
+    var displayUsers = [];
+    for (var i = 0; i < this.state.users.length; i++) {
+      var username = this.state.users[i];
+      displayUsers.push(
+        <li id={i}>
+          {username}
+        </li>
+      );
+    }
+    return (
+      <div>
+        <p>
+          Users in current session:
+        </p>
+        <ul>
+          {displayUsers}
+        </ul>
+      </div>
+    )
   }
 
 }
