@@ -11,10 +11,30 @@ class App extends Component {
     this.state = {
       name: "",
       hasName: false,
-      finalInput: []
+      finalInput: [],
+      existingUsers: []
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
+
+  componentDidMount () {
+    var localExistingUsers = [];
+    firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")   
+    .onSnapshot((doc) => {
+      doc.data().users.forEach((user) => {
+        localExistingUsers.push(
+          <option value={user}>
+            {user}
+          </option>
+        );
+      })
+      
+      this.setState({
+        existingUsers: localExistingUsers
+      })
+    });
+  }
+
 
   handleNameChange = event => {
     event.preventDefault();
@@ -92,9 +112,19 @@ class App extends Component {
 
   render() {
     if (!this.state.hasName) {
+
       return(
-        <div className="homepage">
+        <div className="general">
           <p>Hello!</p>
+
+          <form>
+          <label>Log in as: </label> 
+            <select value={this.state.name} onChange={this.handleNameChange}>
+              {this.state.existingUsers}
+            </select>
+            <button onClick={this.handleNameSubmit}>Go!</button>
+          </form>
+          <p>OR</p>
           <label>Enter your name: </label>
           <form>
             <input type="text" name="usernameValue" id="usernameInput"
@@ -110,7 +140,7 @@ class App extends Component {
       );
     } else {
       return (
-        <div>
+        <div className="general">
           <ItemInput
             name = {this.state.name}
             receiveItemInput = {this.receiveItemInput}
