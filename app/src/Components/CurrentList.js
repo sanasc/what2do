@@ -24,7 +24,7 @@ class CurrentList extends React.Component {
       var localUserVotes = [];
       querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data().count);
+          //console.log(doc.id, " => ", doc.data().count);
           localEntries = localEntries.concat(doc.id);
           localVoteCount = localVoteCount.concat(doc.data().count);
           localUserVotes = localUserVotes.concat(doc.data().votes.includes(this.props.username));
@@ -60,7 +60,6 @@ class CurrentList extends React.Component {
   }
 
   addVote(e) {
-    var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
     var docName = e.target.id;
     console.log("Adding vote", docName);
     this.props.receiveItemInput(docName);
