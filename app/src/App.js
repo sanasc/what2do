@@ -24,6 +24,9 @@ class App extends Component {
       var localExistingUsers = [];
       //console.log(doc.data().users);
       //console.log("before for each " + localExistingUsers);
+      localExistingUsers.push(
+        <option selected value="">Select user</option>
+      )
       doc.data().users.forEach((user) => {
         localExistingUsers.push(
           <option value={user}>
@@ -45,26 +48,31 @@ class App extends Component {
   }
 
   handleNameSubmit = event => {
-    this.setState({ hasName: true })
+    if (this.state.name == "") {
+      window.alert("Display name cannot be empty!");
+      event.preventDefault();
+    } else {
+      this.setState({ hasName: true })
 
-    var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+      var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
 
-    docRef.get().then((doc) => {
-      if (doc.exists) {
-        console.log("Document data:", doc.data());
-        if (doc.data().users.includes(this.state.name)) {
-          // Potentially special treatment for returning users (frontend things)
+      docRef.get().then((doc) => {
+        if (doc.exists) {
+          console.log("Document data:", doc.data());
+          if (doc.data().users.includes(this.state.name)) {
+            // Potentially special treatment for returning users (frontend things)
+          }
+
+          // This method only adds elements not already present
+          return docRef.update({
+            users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+          });
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
         }
-
-        // This method only adds elements not already present
-        return docRef.update({
-          users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
-        });
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-    });
+      });
+    }
   }
 
   resetName = () => {

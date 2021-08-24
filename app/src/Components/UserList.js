@@ -40,7 +40,7 @@ class UserList extends React.Component {
         .onSnapshot( (querySnapshot) => {
           console.log(querySnapshot.empty);
           querySnapshot.forEach( (doc) => {
-            console.log("votes contains" + username + " ", doc.data());
+            console.log("votes contains " + username + " ", doc.data());
             db.collection("items").doc(doc.id).update({
               count: firebase.firestore.FieldValue.increment(-1),
               votes: firebase.firestore.FieldValue.arrayRemove(username)
