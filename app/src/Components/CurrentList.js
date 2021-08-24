@@ -1,5 +1,7 @@
 import React from 'react';
 import firebase from '../firebase';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/free-solid-svg-icons';
 
 class CurrentList extends React.Component {
   constructor(props) {
@@ -11,6 +13,7 @@ class CurrentList extends React.Component {
       isLoaded: false
     }
     this.deleteVote = this.deleteVote.bind(this);
+    this.addVote = this.addVote.bind(this);
   }
 
   componentDidMount() {
@@ -21,7 +24,7 @@ class CurrentList extends React.Component {
       var localUserVotes = [];
       querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data().count);
+          //console.log(doc.id, " => ", doc.data().count);
           localEntries = localEntries.concat(doc.id);
           localVoteCount = localVoteCount.concat(doc.data().count);
           localUserVotes = localUserVotes.concat(doc.data().votes.includes(this.props.username));
@@ -36,17 +39,18 @@ class CurrentList extends React.Component {
   }
 
   deleteVote(e) {
-    console.log(e.target.id);
     var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+    var docName = e.target.id;
+    console.log("Deleting", docName);
 
-    db.collection("items").doc(e.target.id).update({
+    db.collection("items").doc(docName).update({
       count: firebase.firestore.FieldValue.increment(-1),
       votes: firebase.firestore.FieldValue.arrayRemove(this.props.username)
     });
 
-    db.collection("items").doc(e.target.id).get().then((doc) => {
-      if (doc.data().count == 0) {
-        db.collection("items").doc(e.target.id).delete().then(() => {
+    db.collection("items").doc(docName).get().then((doc) => {
+      if (doc.data().count === 0) {
+        db.collection("items").doc(docName).delete().then(() => {
           console.log("Document successfully deleted!");
         }).catch((error) => {
           console.error("Error removing document: ", error);
@@ -55,15 +59,20 @@ class CurrentList extends React.Component {
     });
   }
 
+  addVote(e) {
+    var docName = e.target.id;
+    console.log("Adding vote", docName);
+    this.props.receiveItemInput(docName);
+  }
+
   render() {
     if (!this.state.isLoaded) {
       return (
         <div>
           <p>
-            Current Movies:
+            Current Items:
             <br />
             Loading...
-
           </p>
         </div>
       )
@@ -71,18 +80,23 @@ class CurrentList extends React.Component {
       var displayItems = [];
       for (var i = 0; i < this.state.entries.length; i++) {
         var itemName = this.state.entries[i];
-        displayItems.push(<li id={i}>{ itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] ? <button id={itemName} onClick={this.deleteVote} >Delete</button> : "" } </li>);
+        displayItems.push(
+          <li id={i}>
+            { itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] ?
+              <button id={itemName} onClick={this.deleteVote} > Delete </button>
+              : <button id={itemName} onClick={this.addVote} > Vote </button> }
+          </li>
+        );
       }
 
       return (
         <div>
           <p>
-            Current Movies:
-            <br />
-            <ul>
-              {displayItems}
-            </ul>
+            Current Items:
           </p>
+          <ul>
+            {displayItems}
+          </ul>
         </div>
       )
     }

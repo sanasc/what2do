@@ -3,6 +3,7 @@ import "./App.css";
 import ItemInput from "./Components/ItemInput";
 import CurrentList from "./Components/CurrentList";
 import firebase from './firebase';
+import UserList from "./Components/UserList";
 
 class App extends Component {
   constructor() {
@@ -11,10 +12,35 @@ class App extends Component {
       name: "",
       hasName: false,
       finalInput: [],
-      items: new Map()
+      existingUsers: []
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
+
+  componentDidMount () {
+    
+    firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")   
+    .onSnapshot((doc) => {
+      var localExistingUsers = [];
+      //console.log(doc.data().users);
+      //console.log("before for each " + localExistingUsers);
+      localExistingUsers.push(
+        <option selected value="">Select user</option>
+      )
+      doc.data().users.forEach((user) => {
+        localExistingUsers.push(
+          <option value={user}>
+            {user}
+          </option>
+        );
+      })
+      //console.log("after for each " + localExistingUsers);
+      this.setState({
+        existingUsers: localExistingUsers
+      })
+    });
+  }
+
 
   handleNameChange = event => {
     event.preventDefault();
@@ -22,31 +48,31 @@ class App extends Component {
   }
 
   handleNameSubmit = event => {
-    this.setState({ hasName: true })
-    var username = this.state.name;
+    if (this.state.name == "") {
+      window.alert("Display name cannot be empty!");
+      event.preventDefault();
+    } else {
+      this.setState({ hasName: true })
 
-    var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+      var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
 
-    docRef.get().then((doc) => {
-      if (doc.exists) {
-        console.log("Document data:", doc.data());
-        if (doc.data().users.includes(this.state.name)) {
-          // Potentially special treatment for returning users (frontend things)
+      docRef.get().then((doc) => {
+        if (doc.exists) {
+          console.log("Document data:", doc.data());
+          if (doc.data().users.includes(this.state.name)) {
+            // Potentially special treatment for returning users (frontend things)
+          }
+
+          // This method only adds elements not already present
+          return docRef.update({
+            users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+          });
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
         }
-
-        // This method only adds elements not already present
-        docRef.update({
-          users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
-        });
-
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-    });
-
+      });
+    }
   }
 
   resetName = () => {
@@ -59,19 +85,6 @@ class App extends Component {
   receiveItemInput = currentInput => {
     this.setState({finalInput: this.state.finalInput.concat([currentInput])});
 
-    if (this.state.items.size === 0) {
-      this.state.items.set(currentInput, [this.state.name]);
-    } else {
-      if (this.state.items.has(currentInput)) {
-        this.state.items.set(
-          currentInput,
-          this.state.items.get(currentInput).concat([this.state.name])
-        );
-      } else {
-        this.state.items.set(currentInput, [this.state.name]);
-      }
-    }
-
     // firebase
     var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
                                      .collection("items").doc(currentInput);
@@ -79,10 +92,13 @@ class App extends Component {
       if (doc.exists) {
         console.log("Document data:", doc.data());
 
-        docRef.update({
-          votes: firebase.firestore.FieldValue.arrayUnion(this.state.name),
-          count: firebase.firestore.FieldValue.increment(1)
-        });
+        if (!doc.data().votes.includes(this.state.name)) {
+          docRef.update({
+            count: firebase.firestore.FieldValue.increment(1),
+            votes: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+            
+          });
+        }
 
       } else {
         // doc.data() will be undefined in this case
@@ -108,9 +124,19 @@ class App extends Component {
 
   render() {
     if (!this.state.hasName) {
+
       return(
-        <div className="homepage">
+        <div className="general">
           <p>Hello!</p>
+
+          <form>
+          <label>Log in as: </label> 
+            <select value={this.state.name} onChange={this.handleNameChange}>
+              {this.state.existingUsers}
+            </select>
+            <button onClick={this.handleNameSubmit}>Go!</button>
+          </form>
+          <p>OR</p>
           <label>Enter your name: </label>
           <form>
             <input type="text" name="usernameValue" id="usernameInput"
@@ -122,18 +148,25 @@ class App extends Component {
                 }}/>
             <button onClick={this.handleNameSubmit}>Submit</button>
           </form>
+          <br/>
+          <UserList
+            username = {this.state.name}
+          />
         </div>
       );
     } else {
       return (
-        <div>
+        <div className="general">
           <ItemInput
             name = {this.state.name}
             receiveItemInput = {this.receiveItemInput}
             goBack = {this.resetName}
           />
+
+
           <CurrentList
             username = {this.state.name}
+            receiveItemInput = {this.receiveItemInput}
           />
         </div>
       );
