@@ -37,7 +37,7 @@ class UserList extends React.Component {
       console.log("after update");
 
       db.collection("items").where("votes", "array-contains", username)
-        .onSnapshot( (querySnapshot) => {
+        .get().then( (querySnapshot) => {
           console.log(querySnapshot.empty);
           querySnapshot.forEach( (doc) => {
             console.log("votes contains " + username + " ", doc.data());

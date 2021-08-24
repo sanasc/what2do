@@ -94,8 +94,9 @@ class App extends Component {
 
         if (!doc.data().votes.includes(this.state.name)) {
           docRef.update({
-            votes: firebase.firestore.FieldValue.arrayUnion(this.state.name),
-            count: firebase.firestore.FieldValue.increment(1)
+            count: firebase.firestore.FieldValue.increment(1),
+            votes: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+            
           });
         }
 
