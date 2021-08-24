@@ -18,9 +18,12 @@ class App extends Component {
   }
 
   componentDidMount () {
-    var localExistingUsers = [];
+    
     firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")   
     .onSnapshot((doc) => {
+      var localExistingUsers = [];
+      //console.log(doc.data().users);
+      //console.log("before for each " + localExistingUsers);
       doc.data().users.forEach((user) => {
         localExistingUsers.push(
           <option value={user}>
@@ -28,7 +31,7 @@ class App extends Component {
           </option>
         );
       })
-      
+      //console.log("after for each " + localExistingUsers);
       this.setState({
         existingUsers: localExistingUsers
       })
@@ -136,6 +139,10 @@ class App extends Component {
                 }}/>
             <button onClick={this.handleNameSubmit}>Submit</button>
           </form>
+          <br/>
+          <UserList
+            username = {this.state.name}
+          />
         </div>
       );
     } else {
@@ -147,9 +154,6 @@ class App extends Component {
             goBack = {this.resetName}
           />
 
-          <UserList
-            username = {this.state.name}
-          />
 
           <CurrentList
             username = {this.state.name}

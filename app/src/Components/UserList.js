@@ -7,6 +7,7 @@ class UserList extends React.Component {
     this.state = {
       users: []
     }
+    this.deleteUser = this.deleteUser.bind(this);
   }
 
   componentDidMount() {
@@ -22,13 +23,50 @@ class UserList extends React.Component {
         });
   }
 
+  deleteUser(e) {
+    var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+    var username = e.target.id;
+    console.log("Deleting user", username);
+    
+    db.update({
+      users: firebase.firestore.FieldValue.arrayRemove(username)
+    });
+
+    console.log("after update");
+
+    db.collection("items").where("votes", "array-contains", username)
+      .onSnapshot( (querySnapshot) => {
+        console.log(querySnapshot.empty);
+        querySnapshot.forEach( (doc) => {
+          console.log("votes contains" + username + " ", doc.data());
+          db.collection("items").doc(doc.id).update({
+            count: firebase.firestore.FieldValue.increment(-1),
+            votes: firebase.firestore.FieldValue.arrayRemove(username)
+          })
+      })
+    });
+
+    console.log("after array-contains");
+
+    db.collection("items").where("count", "==", 0)
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach( (doc) => {
+          db.collection("items").doc(doc.id).delete().then(() => {
+            console.log("Document successfully deleted!");
+          }).catch((error) => {
+            console.error("Error removing document: ", error);
+          });
+      })
+    });
+  }
+
   render() {
     var displayUsers = [];
     for (var i = 0; i < this.state.users.length; i++) {
       var username = this.state.users[i];
       displayUsers.push(
         <li id={i}>
-          {username}
+          {username} <button id={username} onClick={this.deleteUser}> Remove User </button>
         </li>
       );
     }
