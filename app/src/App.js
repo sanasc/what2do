@@ -7,20 +7,35 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-
+      sessionID: null
     };
   }
 
   componentDidMount () {
-
+    const queryParams = new URLSearchParams(window.location.search);
+    const session = queryParams.get('session');
+    this.setState({
+      sessionID: session
+    })
   }
 
   render() {
-    return (
-      <div className="general">
-        <SessionPage/>
-      </div>
-    );
+    if (this.state.sessionID != null) {
+      return (
+        <div className="general">
+          <SessionPage
+            sessionID = { this.state.sessionID }
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>Hi</p>
+        </div>
+      );
+    }
+
   }
 }
 

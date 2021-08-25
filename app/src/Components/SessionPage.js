@@ -14,9 +14,9 @@ class SessionPage extends Component {
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
-
+  // "n4JhCl5XDul2rGHAlJln"
   componentDidMount () {
-    firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+    firebase.firestore().collection("sessions").doc(this.props.sessionID)
     .onSnapshot((doc) => {
       var localExistingUsers = [];
 
@@ -49,7 +49,7 @@ class SessionPage extends Component {
     } else {
       this.setState({ hasName: true })
 
-      var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+      var docRef = firebase.firestore().collection("sessions").doc(this.props.sessionID);
 
       docRef.get().then((doc) => {
         if (doc.exists) {
@@ -78,7 +78,7 @@ class SessionPage extends Component {
   }
 
   receiveItemInput = currentInput => {
-    var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+    var docRef = firebase.firestore().collection("sessions").doc(this.props.sessionID)
                                      .collection("items").doc(currentInput);
     docRef.get().then((doc) => {
       if (doc.exists) {
@@ -97,7 +97,7 @@ class SessionPage extends Component {
         console.log("No such document!");
 
         // Create the document
-        firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+        firebase.firestore().collection("sessions").doc(this.props.sessionID)
                             .collection("items").doc(currentInput).set({
                               votes: [ this.state.username ],
                               count: 1
