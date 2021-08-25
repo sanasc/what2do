@@ -9,21 +9,18 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      name: "",
+      username: "",
       hasName: false,
-      finalInput: [],
       existingUsers: []
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
 
   componentDidMount () {
-    
-    firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")   
+    firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
     .onSnapshot((doc) => {
       var localExistingUsers = [];
-      //console.log(doc.data().users);
-      //console.log("before for each " + localExistingUsers);
+
       localExistingUsers.push(
         <option selected value="">Select user</option>
       )
@@ -34,7 +31,7 @@ class App extends Component {
           </option>
         );
       })
-      //console.log("after for each " + localExistingUsers);
+
       this.setState({
         existingUsers: localExistingUsers
       })
@@ -44,11 +41,11 @@ class App extends Component {
 
   handleNameChange = event => {
     event.preventDefault();
-    this.setState({ name:event.target.value });
+    this.setState({ username:event.target.value });
   }
 
   handleNameSubmit = event => {
-    if (this.state.name == "") {
+    if (this.state.username === "") {
       window.alert("Display name cannot be empty!");
       event.preventDefault();
     } else {
@@ -59,13 +56,13 @@ class App extends Component {
       docRef.get().then((doc) => {
         if (doc.exists) {
           console.log("Document data:", doc.data());
-          if (doc.data().users.includes(this.state.name)) {
+          if (doc.data().users.includes(this.state.username)) {
             // Potentially special treatment for returning users (frontend things)
           }
 
           // This method only adds elements not already present
           return docRef.update({
-            users: firebase.firestore.FieldValue.arrayUnion(this.state.name)
+            users: firebase.firestore.FieldValue.arrayUnion(this.state.username)
           });
         } else {
           // doc.data() will be undefined in this case
@@ -77,26 +74,23 @@ class App extends Component {
 
   resetName = () => {
     this.setState({
-      name: "",
+      username: "",
       hasName: false
     })
   }
 
   receiveItemInput = currentInput => {
-    this.setState({finalInput: this.state.finalInput.concat([currentInput])});
-
-    // firebase
     var docRef = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
                                      .collection("items").doc(currentInput);
     docRef.get().then((doc) => {
       if (doc.exists) {
         console.log("Document data:", doc.data());
 
-        if (!doc.data().votes.includes(this.state.name)) {
+        if (!doc.data().votes.includes(this.state.username)) {
           docRef.update({
             count: firebase.firestore.FieldValue.increment(1),
-            votes: firebase.firestore.FieldValue.arrayUnion(this.state.name)
-            
+            votes: firebase.firestore.FieldValue.arrayUnion(this.state.username)
+
           });
         }
 
@@ -104,10 +98,10 @@ class App extends Component {
         // doc.data() will be undefined in this case
         console.log("No such document!");
 
-        // Create the document?
+        // Create the document
         firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
                             .collection("items").doc(currentInput).set({
-                              votes: [ this.state.name ],
+                              votes: [ this.state.username ],
                               count: 1
                             })
         .then(() => {
@@ -130,8 +124,8 @@ class App extends Component {
           <p>Hello!</p>
 
           <form>
-          <label>Log in as: </label> 
-            <select value={this.state.name} onChange={this.handleNameChange}>
+          <label>Log in as: </label>
+            <select value={this.state.username} onChange={this.handleNameChange}>
               {this.state.existingUsers}
             </select>
             <button onClick={this.handleNameSubmit}>Go!</button>
@@ -150,7 +144,7 @@ class App extends Component {
           </form>
           <br/>
           <UserList
-            username = {this.state.name}
+            username = {this.state.username}
           />
         </div>
       );
@@ -158,14 +152,14 @@ class App extends Component {
       return (
         <div className="general">
           <ItemInput
-            name = {this.state.name}
+            username = {this.state.username}
             receiveItemInput = {this.receiveItemInput}
             goBack = {this.resetName}
           />
 
 
           <CurrentList
-            username = {this.state.name}
+            username = {this.state.username}
             receiveItemInput = {this.receiveItemInput}
           />
         </div>
