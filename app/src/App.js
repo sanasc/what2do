@@ -22,20 +22,17 @@ class App extends Component {
   render() {
     if (this.state.sessionID != null) {
       return (
-        <div className="general">
+        <React.Fragment>
           <SessionPage
             sessionID = { this.state.sessionID }
           />
-        </div>
+        </React.Fragment>
       );
     } else {
       return (
-        <div>
-          <p>Hi</p>
-        </div>
+        <React.Fragment/>
       );
     }
-
   }
 }
 
