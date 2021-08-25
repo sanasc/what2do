@@ -27,7 +27,7 @@ class ItemInput extends React.Component {
         <button onClick={this.props.goBack}>Go back</button>
         <br />
         <br />
-        <label>{this.props.name}, enter value: </label>
+        <label>{this.props.username}, enter value: </label>
         <form>
           <input type="textarea" name="textValue" id="userinput"
             onChange={this.handleChange}
@@ -38,7 +38,7 @@ class ItemInput extends React.Component {
               }}/>
           <button onClick={this.sendItemInput}>Submit</button>
         </form>
-        
+
       </div>
     );
   }
