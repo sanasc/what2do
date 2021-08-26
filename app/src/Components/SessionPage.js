@@ -143,6 +143,7 @@ class SessionPage extends Component {
           <br/>
           <UserList
             username = {this.state.username}
+            sessionID = {this.props.sessionID}
           />
         </div>
       );
@@ -158,6 +159,7 @@ class SessionPage extends Component {
           <CurrentList
             username = {this.state.username}
             receiveItemInput = {this.receiveItemInput}
+            sessionID = {this.props.sessionID}
           />
         </div>
       );

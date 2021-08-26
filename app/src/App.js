@@ -9,6 +9,7 @@ class App extends Component {
     this.state = {
       sessionID: null
     };
+    this.createSession = this.createSession.bind(this);
   }
 
   componentDidMount () {
@@ -17,6 +18,23 @@ class App extends Component {
     this.setState({
       sessionID: session
     })
+  }
+
+  createSession() {
+    var db = firebase.firestore().collection("sessions");
+    db.add({
+      users: []
+    })
+    .then((doc) => {
+      console.log("Document successfully written!");
+      console.log(doc.id);
+      this.setState({
+        sessionID: doc.id
+      });
+    })
+    .catch((error) => {
+      console.error("Error writing document: ", error);
+    });
   }
 
   render() {
@@ -30,7 +48,9 @@ class App extends Component {
       );
     } else {
       return (
-        <React.Fragment/>
+        <React.Fragment>
+          <button onClick={ this.createSession }>Create a new session!</button>
+        </React.Fragment>
       );
     }
   }

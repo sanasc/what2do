@@ -17,7 +17,7 @@ class CurrentList extends React.Component {
   }
 
   componentDidMount() {
-    var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+    var db = firebase.firestore().collection("sessions").doc(this.props.sessionID);
     db.collection("items").orderBy("count", "desc").onSnapshot((querySnapshot) => {
       var localEntries = [];
       var localVoteCount = [];
@@ -39,7 +39,7 @@ class CurrentList extends React.Component {
   }
 
   deleteVote(e) {
-    var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
+    var db = firebase.firestore().collection("sessions").doc(this.props.sessionID);
     var docName = e.target.id;
     console.log("Deleting", docName);
 
