@@ -10,6 +10,7 @@ class App extends Component {
       sessionID: null
     };
     this.createSession = this.createSession.bind(this);
+    this.resetSession = this.resetSession.bind(this);
   }
 
   componentDidMount () {
@@ -37,12 +38,20 @@ class App extends Component {
     });
   }
 
+  resetSession() {
+    this.setState({
+      sessionID: null
+    })
+    window.location.href =  window.location.href.split("?")[0];
+  }
+
   render() {
     if (this.state.sessionID != null) {
       return (
         <React.Fragment>
           <SessionPage
             sessionID = { this.state.sessionID }
+            resetSession = { this.resetSession }
           />
         </React.Fragment>
       );

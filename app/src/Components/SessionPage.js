@@ -14,7 +14,7 @@ class SessionPage extends Component {
     };
     this.handleNameChange = this.handleNameChange.bind(this);
   }
-  // "n4JhCl5XDul2rGHAlJln"
+
   componentDidMount () {
     firebase.firestore().collection("sessions").doc(this.props.sessionID)
     .onSnapshot((doc) => {
@@ -145,6 +145,12 @@ class SessionPage extends Component {
             username = {this.state.username}
             sessionID = {this.props.sessionID}
           />
+          <br/>
+          <button onClick={() => {navigator.clipboard.writeText("http://localhost:3000/" + window.location.search)}}>
+            Click to copy session link!
+          </button>
+          <br/>
+          <button onClick={() => this.props.resetSession()}>Leave session</button>
         </div>
       );
     } else {
