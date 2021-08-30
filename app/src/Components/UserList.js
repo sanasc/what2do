@@ -11,7 +11,7 @@ class UserList extends React.Component {
   }
 
   componentDidMount() {
-    firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln")
+    firebase.firestore().collection("sessions").doc(this.props.sessionID)
         .onSnapshot((doc) => {
           var localUsers = [];
           doc.data().users.forEach((user) => {
@@ -26,10 +26,10 @@ class UserList extends React.Component {
   deleteUser(e) {
     var username = e.target.id;
     if (window.confirm("You are about to delete user " + username + " and all their votes.\nProceed?")) {
-      var db = firebase.firestore().collection("sessions").doc("n4JhCl5XDul2rGHAlJln");
-    
+      var db = firebase.firestore().collection("sessions").doc(this.props.sessionID);
+
       console.log("Deleting user", username);
-      
+
       db.update({
         users: firebase.firestore.FieldValue.arrayRemove(username)
       });
@@ -60,7 +60,7 @@ class UserList extends React.Component {
             });
         })
       });
-    }     
+    }
   }
 
   render() {
