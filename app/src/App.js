@@ -16,9 +16,20 @@ class App extends Component {
   componentDidMount () {
     const queryParams = new URLSearchParams(window.location.search);
     const session = queryParams.get('session');
-    this.setState({
-      sessionID: session
-    })
+
+    if (session !== "" && session !== null) {
+      firebase.firestore().collection("sessions").doc(session).get().then((doc) => {
+        if (doc.exists) {
+          this.setState({
+            sessionID: session
+          })
+        } else {
+          this.setState({
+            sessionID: ""
+          })
+        }
+      })
+    }
   }
 
   createSession() {
@@ -46,19 +57,22 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.sessionID != null) {
+    if (this.state.sessionID === null) {
+      return (
+        <React.Fragment>
+          <button onClick={ this.createSession }>Create a new session!</button>
+        </React.Fragment>
+      );
+    } else if (this.state.sessionID === "") {
+      this.resetSession();
+      window.alert("This is an invalid session ID.");
+    } else {
       return (
         <React.Fragment>
           <SessionPage
             sessionID = { this.state.sessionID }
             resetSession = { this.resetSession }
           />
-        </React.Fragment>
-      );
-    } else {
-      return (
-        <React.Fragment>
-          <button onClick={ this.createSession }>Create a new session!</button>
         </React.Fragment>
       );
     }
