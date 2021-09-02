@@ -10,9 +10,12 @@ class SessionPage extends Component {
     this.state = {
       username: "",
       hasName: false,
-      existingUsers: []
+      existingUsers: [],
+      tempExternalID: ""
     };
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSessionChange = this.handleSessionChange.bind(this);
+    this.handleSessionSubmit = this.handleSessionSubmit.bind(this);
   }
 
   componentDidMount () {
@@ -114,9 +117,38 @@ class SessionPage extends Component {
     });
   }
 
+  handleSessionChange = event => {
+    event.preventDefault();
+    console.log(event.target.value);
+    this.setState({ tempExternalID:event.target.value });
+  }
+
+  handleSessionSubmit(event) {
+    event.preventDefault();
+    console.log(this.state.tempExternalID);
+
+    firebase.firestore().collection("sessions").doc(this.state.tempExternalID)
+      .get().then((doc) => {
+        if (doc.exists) {
+          window.alert("This session ID is already being used. Please enter a new session ID.")
+        } else {
+          firebase.firestore().collection("sessions").where("externalName", "==", this.state.tempExternalID).get().then((querySnapshot) => {
+            if (querySnapshot.empty) {
+              this.props.renameSession(this.state.tempExternalID)
+            } else {
+              window.alert("This session ID is already being used. Please enter a new session ID.")
+            }
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error);
+          });
+        }
+    })
+
+  }
+
   render() {
     if (!this.state.hasName) {
-
       return(
         <div className="general">
           <p>Hello!</p>
@@ -149,6 +181,18 @@ class SessionPage extends Component {
           <button onClick={() => {navigator.clipboard.writeText("http://localhost:3000/" + window.location.search)}}>
             Click to copy session link!
           </button>
+          <br/>
+          <label>Change session ID: </label>
+          <form>
+            <input type="text" name="sessionIDValue"
+              onChange={this.handleSessionChange}
+              onKeyPress={event => {
+                  if (event.key === 'Enter') {
+                    this.handleSessionSubmit(event)
+                  }
+                }}/>
+            <button onClick={this.handleSessionSubmit}>Submit</button>
+          </form>
           <br/>
           <button onClick={() => this.props.resetSession()}>Leave session</button>
         </div>

@@ -7,10 +7,12 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      sessionID: null
+      sessionID: null,
+      externalID: null
     };
     this.createSession = this.createSession.bind(this);
     this.resetSession = this.resetSession.bind(this);
+    this.renameSession = this.renameSession.bind(this);
   }
 
   componentDidMount () {
@@ -43,6 +45,9 @@ class App extends Component {
       this.setState({
         sessionID: doc.id
       });
+      db.doc(doc.id).update({
+        externalID: doc.id
+      })
     })
     .catch((error) => {
       console.error("Error writing document: ", error);
@@ -51,12 +56,24 @@ class App extends Component {
 
   resetSession() {
     this.setState({
-      sessionID: null
+      sessionID: null,
+      externalID: null
     })
     window.location.href =  window.location.href.split("?")[0];
   }
 
+  renameSession = newExternalID => {
+    firebase.firestore().collection("sessions").doc(this.state.sessionID).update({
+      externalID: newExternalID
+    })
+
+    this.setState({
+      externalID: newExternalID
+    })
+  }
+
   render() {
+    console.log(this.state.sessionID);
     if (this.state.sessionID === null) {
       return (
         <React.Fragment>
@@ -64,6 +81,7 @@ class App extends Component {
         </React.Fragment>
       );
     } else if (this.state.sessionID === "") {
+      console.log(this.state.sessionID);
       this.resetSession();
       window.alert("This is an invalid session ID.");
     } else {
@@ -72,6 +90,7 @@ class App extends Component {
           <SessionPage
             sessionID = { this.state.sessionID }
             resetSession = { this.resetSession }
+            renameSession = { this.renameSession }
           />
         </React.Fragment>
       );
