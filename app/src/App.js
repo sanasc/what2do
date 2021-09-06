@@ -22,19 +22,19 @@ class App extends Component {
     const URLName = queryParams.get('session');
     if (URLName !== "" && URLName !== null) {
       firebase.firestore().collection("sessions").where("externalID", "==", URLName).get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          if (doc.exists) {
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach((doc) => {
             this.setState({
               sessionID: doc.id,
               externalID: URLName
-            })
-          } else {
-            this.setState({
-              sessionID: "",
-              externalID: ""
-            })
-          }
-        });        
+            });
+          });
+        } else {
+          this.setState({
+            sessionID: "",
+            externalID: ""
+          });
+        }     
       })
     }
   }
@@ -122,8 +122,8 @@ class App extends Component {
       );
     } else if (this.state.sessionID === "") {
       console.log("Made it to the else-if!");
-      this.resetSession();
       window.alert("This is an invalid session ID.");
+      this.resetSession();
     } else {
       return (
         <React.Fragment>
