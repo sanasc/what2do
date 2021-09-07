@@ -34,7 +34,7 @@ class SessionPage extends Component {
       )
       doc.data().users.forEach((user) => {
         localExistingUsers.push(
-          <option value={user}>
+          <option key={user} value={user}>
             {user}
           </option>
         );
