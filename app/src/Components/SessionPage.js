@@ -19,12 +19,18 @@ class SessionPage extends Component {
   }
 
   componentDidMount () {
+    // Update URL to include "?session=" and the external ID
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set('session', this.props.externalID);
+    window.history.replaceState({}, '', `${window.location.pathname}?${queryParams}`);
+
+    // Collect the user names of everyone in this session
     firebase.firestore().collection("sessions").doc(this.props.sessionID)
     .onSnapshot((doc) => {
       var localExistingUsers = [];
 
       localExistingUsers.push(
-        <option selected value="">Select user</option>
+        <option key={"default"} value="DEFAULT">Select user</option>
       )
       doc.data().users.forEach((user) => {
         localExistingUsers.push(
@@ -155,7 +161,7 @@ class SessionPage extends Component {
 
           <form>
           <label>Log in as: </label>
-            <select value={this.state.username} onChange={this.handleNameChange}>
+            <select defaultValue={"DEFAULT"} onChange={this.handleNameChange}>
               {this.state.existingUsers}
             </select>
             <button onClick={this.handleNameSubmit}>Go!</button>

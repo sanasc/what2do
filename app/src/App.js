@@ -34,7 +34,7 @@ class App extends Component {
             sessionID: "",
             externalID: ""
           });
-        }     
+        }
       })
     }
   }
@@ -89,7 +89,7 @@ class App extends Component {
       sessionID: null,
       externalID: null
     })
-    window.location.href =  window.location.href.split("?")[0];
+    window.location.href = window.location.href.split("?")[0];
   }
 
   renameSession = newExternalID => {
