@@ -41,9 +41,7 @@ class App extends Component {
 
   handleExternalIDChange = event => {
     event.preventDefault();
-    console.log("User selected an externalID: " + event.target.value);
     this.setState({ tempExternalID: event.target.value });
-    console.log("state tempExternalID: " + this.state.tempExternalID);
   }
 
   createSession() {
@@ -103,7 +101,6 @@ class App extends Component {
   }
 
   render() {
-    console.log("sessionID: " + this.state.sessionID);
     if (this.state.sessionID === null) {
       return (
         <React.Fragment>
