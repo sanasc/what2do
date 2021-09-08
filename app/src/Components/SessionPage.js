@@ -10,22 +10,31 @@ class SessionPage extends Component {
     this.state = {
       username: "",
       hasName: false,
-      existingUsers: []
+      existingUsers: [],
+      tempExternalID: ""
     };
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSessionChange = this.handleSessionChange.bind(this);
+    this.handleSessionSubmit = this.handleSessionSubmit.bind(this);
   }
 
   componentDidMount () {
+    // Update URL to include "?session=" and the external ID
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set('session', this.props.externalID);
+    window.history.replaceState({}, '', `${window.location.pathname}?${queryParams}`);
+
+    // Collect the user names of everyone in this session
     firebase.firestore().collection("sessions").doc(this.props.sessionID)
     .onSnapshot((doc) => {
       var localExistingUsers = [];
 
       localExistingUsers.push(
-        <option selected value="">Select user</option>
+        <option key={"default"} value="DEFAULT">Select user</option>
       )
       doc.data().users.forEach((user) => {
         localExistingUsers.push(
-          <option value={user}>
+          <option key={user} value={user}>
             {user}
           </option>
         );
@@ -114,16 +123,45 @@ class SessionPage extends Component {
     });
   }
 
+  handleSessionChange = event => {
+    event.preventDefault();
+    console.log(event.target.value);
+    this.setState({ tempExternalID:event.target.value });
+  }
+
+  handleSessionSubmit(event) {
+    event.preventDefault();
+    console.log(this.state.tempExternalID);
+
+    firebase.firestore().collection("sessions").doc(this.state.tempExternalID)
+      .get().then((doc) => {
+        if (doc.exists) {
+          window.alert("This session ID is already being used. Please enter a new session ID.")
+        } else {
+          firebase.firestore().collection("sessions").where("externalName", "==", this.state.tempExternalID).get().then((querySnapshot) => {
+            if (querySnapshot.empty) {
+              this.props.renameSession(this.state.tempExternalID)
+            } else {
+              window.alert("This session ID is already being used. Please enter a new session ID.")
+            }
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error);
+          });
+        }
+    })
+
+  }
+
   render() {
     if (!this.state.hasName) {
-
       return(
         <div className="general">
           <p>Hello!</p>
 
           <form>
           <label>Log in as: </label>
-            <select value={this.state.username} onChange={this.handleNameChange}>
+            <select defaultValue={"DEFAULT"} onChange={this.handleNameChange}>
               {this.state.existingUsers}
             </select>
             <button onClick={this.handleNameSubmit}>Go!</button>
@@ -149,6 +187,18 @@ class SessionPage extends Component {
           <button onClick={() => {navigator.clipboard.writeText("http://localhost:3000/" + window.location.search)}}>
             Click to copy session link!
           </button>
+          <br/>
+          <label>Change session ID: </label>
+          <form>
+            <input type="text" name="sessionIDValue"
+              onChange={this.handleSessionChange}
+              onKeyPress={event => {
+                  if (event.key === 'Enter') {
+                    this.handleSessionSubmit(event)
+                  }
+                }}/>
+            <button onClick={this.handleSessionSubmit}>Submit</button>
+          </form>
           <br/>
           <button onClick={() => this.props.resetSession()}>Leave session</button>
         </div>

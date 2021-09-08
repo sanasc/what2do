@@ -64,22 +64,19 @@ class UserList extends React.Component {
   }
 
   render() {
-    var displayUsers = [];
-    for (var i = 0; i < this.state.users.length; i++) {
-      var username = this.state.users[i];
-      displayUsers.push(
-        <li id={i}>
-          {username} <button id={username} onClick={this.deleteUser}> Remove User </button>
-        </li>
-      );
-    }
     return (
       <div>
         <p>
           Users in current session:
         </p>
         <ul>
-          {displayUsers}
+          {this.state.users.map((eachUser) => {
+            return (
+              <li key={eachUser}>
+                {eachUser} <button id={eachUser} onClick={this.deleteUser}> Remove User </button>
+              </li>
+            );
+          })}
         </ul>
       </div>
     )

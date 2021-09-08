@@ -7,58 +7,129 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      sessionID: null
+      sessionID: null,
+      externalID: null,
+      tempExternalID: null
     };
     this.createSession = this.createSession.bind(this);
     this.resetSession = this.resetSession.bind(this);
+    this.renameSession = this.renameSession.bind(this);
+    this.handleExternalIDChange = this.handleExternalIDChange.bind(this);
   }
 
   componentDidMount () {
     const queryParams = new URLSearchParams(window.location.search);
-    const session = queryParams.get('session');
-    this.setState({
-      sessionID: session
-    })
+    const URLName = queryParams.get('session');
+    if (URLName !== "" && URLName !== null) {
+      firebase.firestore().collection("sessions").where("externalID", "==", URLName).get().then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach((doc) => {
+            this.setState({
+              sessionID: doc.id,
+              externalID: URLName
+            });
+          });
+        } else {
+          this.setState({
+            sessionID: "",
+            externalID: ""
+          });
+        }
+      })
+    }
+  }
+
+  handleExternalIDChange = event => {
+    event.preventDefault();
+    this.setState({ tempExternalID: event.target.value });
   }
 
   createSession() {
+    console.log("this.state.tempExternalID: " + this.state.tempExternalID);
     var db = firebase.firestore().collection("sessions");
-    db.add({
-      users: []
-    })
-    .then((doc) => {
-      console.log("Document successfully written!");
-      console.log(doc.id);
-      this.setState({
-        sessionID: doc.id
-      });
-    })
-    .catch((error) => {
-      console.error("Error writing document: ", error);
+    firebase.firestore().collection("sessions").where("externalID", "==", this.state.tempExternalID).get().then((querySnapshot) => {
+      if (!querySnapshot.empty){
+        this.setState({sessionID: ""})
+      } else {
+        db.add({
+          users: [],
+          externalID: ""
+        })
+        .then((doc) => {
+          console.log("Document successfully written! Doc.id: " + doc.id);
+          if (this.state.tempExternalID === null) {
+            this.setState({
+              sessionID: doc.id,
+              externalID: doc.id
+            });
+            db.doc(doc.id).update({
+              externalID: doc.id
+            })
+          } else {
+              this.setState({
+                  sessionID: doc.id,
+                  externalID: this.state.tempExternalID
+                });
+                db.doc(doc.id).update({
+                  externalID: this.state.tempExternalID
+                })
+              }
+            })
+        .catch((error) => {
+          console.error("Error writing document: ", error);
+        });
+      }
     });
   }
 
   resetSession() {
     this.setState({
-      sessionID: null
+      sessionID: null,
+      externalID: null
     })
-    window.location.href =  window.location.href.split("?")[0];
+    window.location.href = window.location.href.split("?")[0];
+  }
+
+  renameSession = newExternalID => {
+    firebase.firestore().collection("sessions").doc(this.state.sessionID).update({
+      externalID: newExternalID
+    })
+
+    this.setState({
+      externalID: newExternalID
+    })
   }
 
   render() {
-    if (this.state.sessionID != null) {
+    if (this.state.sessionID === null) {
+      return (
+        <React.Fragment>
+          <label>Pick your own custom URL! </label>
+          <br/>
+          <input type="text" id="externalIDInput"
+            onChange={this.handleExternalIDChange}
+            onKeyPress={event => {
+                if (event.key === 'Enter') {
+                  this.createSession(event)
+                }
+            }}/>
+          <button onClick={ this.createSession }>Submit your own URL</button>
+          <button onClick={ this.createSession }>Use a randomly generated URL</button>
+        </React.Fragment>
+      );
+    } else if (this.state.sessionID === "") {
+      console.log("Made it to the else-if!");
+      window.alert("This is an invalid session ID.");
+      this.resetSession();
+    } else {
       return (
         <React.Fragment>
           <SessionPage
             sessionID = { this.state.sessionID }
             resetSession = { this.resetSession }
+            renameSession = { this.renameSession }
+            externalID = { this.state.externalID }
           />
-        </React.Fragment>
-      );
-    } else {
-      return (
-        <React.Fragment>
-          <button onClick={ this.createSession }>Create a new session!</button>
         </React.Fragment>
       );
     }

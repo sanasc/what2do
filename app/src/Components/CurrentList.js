@@ -1,7 +1,5 @@
 import React from 'react';
 import firebase from '../firebase';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
 
 class CurrentList extends React.Component {
   constructor(props) {
