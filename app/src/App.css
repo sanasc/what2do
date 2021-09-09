@@ -1,10 +1,6 @@
-div.general {
-  /* text-align: center; */
-  margin-top: 3em;
-  margin-left: 3em;
-}
 
-.App {
+
+/* .App {
   text-align: center;
 }
 
@@ -41,4 +37,36 @@ div.general {
   to {
     transform: rotate(360deg);
   }
+} */
+
+/* ========================= */
+
+div.general {
+  /* text-align: left; */
+  margin-top: 3em;
+  margin-left: 3em;
+}
+
+.color-button {
+  margin: 1em 1em;
+  padding: 0 1em;
+}
+
+div.splash {
+  text-align: center;
+}
+
+body {
+  background-color: #CADEDF;
+}
+
+.banner {
+  background-color: #16796F;
+  width: 100%;
+  display: inline-block;
+  color: #DFE7E7;
+}
+
+#pick-url {
+  width: 100%;
 }

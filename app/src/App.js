@@ -3,6 +3,55 @@ import "./App.css";
 import firebase from './firebase';
 import SessionPage from "./Components/SessionPage";
 
+
+import {
+  createTheme,
+  createStyles,
+  withStyles,
+  makeStyles,
+  Theme,
+  ThemeProvider,
+} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText("#7CB7AF"),
+    backgroundColor: "#7CB7AF",
+    margin: "0 1em",
+    '&:hover': {
+      backgroundColor: "#16796F",
+    },
+    '&:disabled': {
+      backgroundColor: "#9CA89E",
+    },
+  },
+}))(Button);
+
+const TextFieldExtId = withStyles((theme) => ({
+  root: {
+    width: "25%",
+    minWidth: "15em",
+    '& label.Mui-focused': {
+      color: "#16796F",
+    },
+    '& input:valid + fieldset': {
+      borderColor: "#7CB7AF",
+      borderWidth: 2,
+    },
+    '& input:invalid + fieldset': {
+      borderColor: "#16796F",
+      borderWidth: 2,
+    },
+    '& input:valid:focus + fieldset': {
+      borderLeftWidth: 6,
+      borderColor: "#16796F",
+      textColor: "#16796F",
+    },
+  },
+}))(TextField);
+
 class App extends Component {
   constructor() {
     super();
@@ -104,17 +153,40 @@ class App extends Component {
     if (this.state.sessionID === null) {
       return (
         <React.Fragment>
-          <label>Pick your own custom URL! </label>
+
+        <div className="banner splash">
+          <h1>Welcome to what2do</h1>
+        </div>
+        <div className="splash">
+          
+          <h2>Create a new session below!</h2>
           <br/>
-          <input type="text" id="externalIDInput"
+
+          <TextFieldExtId id="externalIDInput" label="Pick your own custom URL!" variant="outlined" 
             onChange={this.handleExternalIDChange}
             onKeyPress={event => {
                 if (event.key === 'Enter') {
                   this.createSession(event)
                 }
             }}/>
-          <button onClick={ this.createSession }>Submit your own URL</button>
-          <button onClick={ this.createSession }>Use a randomly generated URL</button>
+          <ColorButton 
+            className ="color-button" 
+            variant="contained" 
+            color="primary" 
+            size="large" 
+            disableElevation 
+            disabled={this.state.tempExternalID == null || this.state.tempExternalID == ""} 
+            onClick={ this.createSession }>Submit</ColorButton>
+          <p><i>OR</i></p>
+          <ColorButton className ="color-button" 
+            variant="contained" 
+            color="primary" 
+            disableElevation 
+            size="large" 
+            className="btn btn-outline-dark btn-lg btn-block" 
+            onClick={ this.createSession }>Use a randomly generated URL</ColorButton>
+          <br/>
+        </div>
         </React.Fragment>
       );
     } else if (this.state.sessionID === "") {
@@ -137,3 +209,5 @@ class App extends Component {
 }
 
 export default App;
+
+
