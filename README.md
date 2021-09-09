@@ -12,6 +12,6 @@ This project is created using:
 * Firebase
 
 ## Contributors
-* DaviidK
-* lalinw
-* sanasc
+* David Kang - DaviidK
+* Irene Wachirawutthichai - lalinw
+* Sana Suse - sanasc
