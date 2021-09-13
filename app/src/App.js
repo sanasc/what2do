@@ -48,6 +48,7 @@ const TextFieldExtId = withStyles((theme) => ({
       borderLeftWidth: 6,
       borderColor: "#16796F",
       textColor: "#16796F",
+      padding: '4px !important',
     },
   },
 }))(TextField);
@@ -98,7 +99,8 @@ class App extends Component {
     var db = firebase.firestore().collection("sessions");
     firebase.firestore().collection("sessions").where("externalID", "==", this.state.tempExternalID).get().then((querySnapshot) => {
       if (!querySnapshot.empty){
-        this.setState({sessionID: ""})
+        this.setState({sessionID: null})
+        window.alert("This session ID already exists.\nPlease input a different session ID.")
       } else {
         db.add({
           users: [],
@@ -158,32 +160,32 @@ class App extends Component {
           <h1>Welcome to what2do</h1>
         </div>
         <div className="splash">
-          
+
           <h2>Create a new session below!</h2>
           <br/>
 
-          <TextFieldExtId id="externalIDInput" label="Pick your own custom URL!" variant="outlined" 
+          <TextFieldExtId id="externalIDInput" label="Pick your own custom URL!" variant="outlined"
             onChange={this.handleExternalIDChange}
             onKeyPress={event => {
                 if (event.key === 'Enter') {
                   this.createSession(event)
                 }
             }}/>
-          <ColorButton 
-            className ="color-button" 
-            variant="contained" 
-            color="primary" 
-            size="large" 
-            disableElevation 
-            disabled={this.state.tempExternalID == null || this.state.tempExternalID == ""} 
+          <ColorButton
+            className ="color-button"
+            variant="contained"
+            color="primary"
+            size="large"
+            disableElevation
+            disabled={this.state.tempExternalID == null || this.state.tempExternalID == ""}
             onClick={ this.createSession }>Submit</ColorButton>
           <p><i>OR</i></p>
-          <ColorButton className ="color-button" 
-            variant="contained" 
-            color="primary" 
-            disableElevation 
-            size="large" 
-            className="btn btn-outline-dark btn-lg btn-block" 
+          <ColorButton className ="color-button"
+            variant="contained"
+            color="primary"
+            disableElevation
+            size="large"
+            className="btn btn-outline-dark btn-lg btn-block"
             onClick={ this.createSession }>Use a randomly generated URL</ColorButton>
           <br/>
         </div>
@@ -209,5 +211,3 @@ class App extends Component {
 }
 
 export default App;
-
-
