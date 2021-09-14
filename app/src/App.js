@@ -3,7 +3,6 @@ import "./App.css";
 import firebase from './firebase';
 import SessionPage from "./Components/SessionPage";
 
-
 import {
   createTheme,
   createStyles,
@@ -65,6 +64,7 @@ class App extends Component {
     this.resetSession = this.resetSession.bind(this);
     this.renameSession = this.renameSession.bind(this);
     this.handleExternalIDChange = this.handleExternalIDChange.bind(this);
+    this.SplashBanner = this.SplashBanner.bind(this);
   }
 
   componentDidMount () {
@@ -151,14 +151,20 @@ class App extends Component {
     })
   }
 
+  SplashBanner(props) {
+    return (
+      <div className="banner splash">
+        <h1>{props.text}</h1>
+      </div>
+    );
+  }
+
   render() {
     if (this.state.sessionID === null) {
       return (
         <React.Fragment>
 
-        <div className="banner splash">
-          <h1>Welcome to what2do</h1>
-        </div>
+        <this.SplashBanner text="Welcome to what2do"/>
         <div className="splash">
 
           <h2>Create a new session below!</h2>
@@ -203,6 +209,7 @@ class App extends Component {
             resetSession = { this.resetSession }
             renameSession = { this.renameSession }
             externalID = { this.state.externalID }
+            SplashBanner = { this.SplashBanner }
           />
         </React.Fragment>
       );

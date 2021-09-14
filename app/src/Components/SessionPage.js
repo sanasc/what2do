@@ -4,6 +4,55 @@ import ItemInput from "./ItemInput";
 import CurrentList from "./CurrentList";
 import UserList from "./UserList";
 
+import {
+  createTheme,
+  createStyles,
+  withStyles,
+  makeStyles,
+  Theme,
+  ThemeProvider,
+} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    // textTransform: "none",
+    color: theme.palette.getContrastText("#7CB7AF"),
+    backgroundColor: "#7CB7AF",
+    margin: "0 1em",
+    '&:hover': {
+      backgroundColor: "#16796F",
+    },
+    '&:disabled': {
+      backgroundColor: "#9CA89E",
+    },
+  },
+}))(Button);
+
+const CustomTextField = withStyles((theme) => ({
+  root: {
+    minWidth: "15em",
+    '& label.Mui-focused': {
+      color: "#16796F",
+    },
+    '& input:valid + fieldset': {
+      borderColor: "#7CB7AF",
+      borderWidth: 2,
+    },
+    '& input:invalid + fieldset': {
+      borderColor: "#16796F",
+      borderWidth: 2,
+    },
+    '& input:valid:focus + fieldset': {
+      borderLeftWidth: 6,
+      borderColor: "#16796F",
+      textColor: "#16796F",
+      padding: '4px !important',
+    },
+  },
+}))(TextField);
+
 class SessionPage extends Component {
   constructor(props) {
     super(props);
@@ -156,52 +205,81 @@ class SessionPage extends Component {
   render() {
     if (!this.state.hasName) {
       return(
-        <div className="general">
-          <p>Hello!</p>
-
-          <form>
-          <label>Log in as: </label>
-            <select defaultValue={"DEFAULT"} onChange={this.handleNameChange}>
-              {this.state.existingUsers}
-            </select>
-            <button onClick={this.handleNameSubmit}>Go!</button>
-          </form>
-          <p>OR</p>
-          <label>Enter your name: </label>
-          <form>
-            <input type="text" name="usernameValue" id="usernameInput"
-              onChange={this.handleNameChange}
-              onKeyPress={event => {
-                  if (event.key === 'Enter') {
-                    this.handleNameSubmit(event)
-                  }
+        <React.Fragment>
+          <this.props.SplashBanner text="Welcome to your what2do session!"/>
+          <div className="general">
+            <form>
+            <label>Log in as: </label>
+              <select defaultValue={"DEFAULT"} onChange={this.handleNameChange}>
+                {this.state.existingUsers}
+              </select>
+              <ColorButton
+                className ="color-button"
+                variant="contained"
+                color="primary"
+                size="small"
+                disableElevation
+                onClick={ this.handleNameSubmit }>Go!</ColorButton>
+            </form>
+            <p>OR</p>
+            <form>
+              <CustomTextField id="nameInput" label="Enter your name:" variant="outlined" size="small"
+                onChange={this.handleNameChange}
+                onKeyPress={event => {
+                    if (event.key === 'Enter') {
+                      this.handleNameSubmit(event)
+                    }
                 }}/>
-            <button onClick={this.handleNameSubmit}>Submit</button>
-          </form>
-          <br/>
-          <UserList
-            username = {this.state.username}
-            sessionID = {this.props.sessionID}
-          />
-          <br/>
-          <button onClick={() => {navigator.clipboard.writeText("http://localhost:3000/" + window.location.search)}}>
-            Click to copy session link!
-          </button>
-          <br/>
-          <label>Change session ID: </label>
-          <form>
-            <input type="text" name="sessionIDValue"
-              onChange={this.handleSessionChange}
-              onKeyPress={event => {
-                  if (event.key === 'Enter') {
-                    this.handleSessionSubmit(event)
-                  }
+              <ColorButton
+                className ="color-button"
+                variant="contained"
+                color="primary"
+                size="small"
+                disableElevation
+                onClick={ this.handleNameSubmit }>Submit</ColorButton>
+            </form>
+            <br/>
+            <UserList
+              username = {this.state.username}
+              sessionID = {this.props.sessionID}
+            />
+            <br/>
+            <ColorButton
+              className ="color-button"
+              variant="contained"
+              color="primary"
+              size="small"
+              disableElevation
+              onClick={ () => {navigator.clipboard.writeText("http://localhost:3000/" + window.location.search)} }>
+              Click to copy session link!
+            </ColorButton>
+            <br/><br/>
+            <form>
+              <CustomTextField id="changeExternalID" label="Change session ID:" variant="outlined" size="small"
+                onChange={this.handleSessionChange}
+                onKeyPress={event => {
+                    if (event.key === 'Enter') {
+                      this.handleSessionSubmit(event)
+                    }
                 }}/>
-            <button onClick={this.handleSessionSubmit}>Submit</button>
-          </form>
-          <br/>
-          <button onClick={() => this.props.resetSession()}>Leave session</button>
-        </div>
+              <ColorButton
+                className ="color-button"
+                variant="contained"
+                color="primary"
+                size="small"
+                disableElevation
+                onClick={ this.handleSessionSubmit }>Submit</ColorButton>
+            </form>
+            <br/>
+            <ColorButton
+              className ="color-button"
+              variant="contained"
+              color="primary"
+              size="small"
+              disableElevation
+              onClick={ this.props.resetSession }>Leave session</ColorButton>
+          </div>
+        </React.Fragment>
       );
     } else {
       return (
