@@ -1,5 +1,30 @@
 import React from 'react'
 
+import {
+  createTheme,
+  createStyles,
+  withStyles,
+  makeStyles,
+  Theme,
+  ThemeProvider,
+} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    // textTransform: "none",
+    color: theme.palette.getContrastText("#7CB7AF"),
+    backgroundColor: "#7CB7AF",
+    margin: "0 1em",
+    '&:hover': {
+      backgroundColor: "#16796F",
+    },
+    '&:disabled': {
+      backgroundColor: "#9CA89E",
+    },
+  },
+}))(Button);
+
 class ItemInput extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +49,13 @@ class ItemInput extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.props.goBack}>Go back</button>
+        <ColorButton
+          className ="color-button"
+          variant="contained"
+          color="primary"
+          size="small"
+          disableElevation
+          onClick={ this.props.goBack }>Go back</ColorButton>
         <br />
         <br />
         <label>{this.props.username}, enter value: </label>
@@ -36,7 +67,13 @@ class ItemInput extends React.Component {
                   this.sendItemInput(event)
                 }
               }}/>
-          <button onClick={this.sendItemInput}>Submit</button>
+          <ColorButton
+            className ="color-button"
+            variant="contained"
+            color="primary"
+            size="small"
+            disableElevation
+            onClick={ this.sendItemInput }>Submit</ColorButton>
         </form>
 
       </div>

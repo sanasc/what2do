@@ -1,6 +1,31 @@
 import React from 'react';
 import firebase from '../firebase';
 
+import {
+  createTheme,
+  createStyles,
+  withStyles,
+  makeStyles,
+  Theme,
+  ThemeProvider,
+} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    // textTransform: "none",
+    color: theme.palette.getContrastText("#7CB7AF"),
+    backgroundColor: "#7CB7AF",
+    margin: "0 1em",
+    '&:hover': {
+      backgroundColor: "#16796F",
+    },
+    '&:disabled': {
+      backgroundColor: "#9CA89E",
+    },
+  },
+}))(Button);
+
 class CurrentList extends React.Component {
   constructor(props) {
     super(props);
@@ -38,7 +63,7 @@ class CurrentList extends React.Component {
 
   deleteVote(e) {
     var db = firebase.firestore().collection("sessions").doc(this.props.sessionID);
-    var docName = e.target.id;
+    var docName = e.currentTarget.value;
     console.log("Deleting", docName);
 
     db.collection("items").doc(docName).update({
@@ -58,7 +83,7 @@ class CurrentList extends React.Component {
   }
 
   addVote(e) {
-    var docName = e.target.id;
+    var docName = e.currentTarget.value;
     console.log("Adding vote", docName);
     this.props.receiveItemInput(docName);
   }
@@ -80,9 +105,27 @@ class CurrentList extends React.Component {
         var itemName = this.state.entries[i];
         displayItems.push(
           <li id={i}>
-            { itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] ?
-              <button id={itemName} onClick={this.deleteVote} > Delete </button>
-              : <button id={itemName} onClick={this.addVote} > Vote </button> }
+            { itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] 
+              ?
+              // <button id={itemName} onClick={this.deleteVote} > Delete </button>
+              <ColorButton
+                value={itemName}
+                className ="color-button"
+                variant="contained"
+                color="primary"
+                size="small"
+                disableElevation
+                onClick={ this.deleteVote }>Delete</ColorButton>
+              : 
+              // <button id={itemName} onClick={this.addVote} > Vote </button> 
+              <ColorButton
+                value={itemName}
+                className ="color-button"
+                variant="contained"
+                color="primary"
+                size="small"
+                disableElevation
+                onClick={ this.addVote }>Vote</ColorButton> }
           </li>
         );
       }
