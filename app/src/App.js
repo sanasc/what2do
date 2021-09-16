@@ -52,6 +52,7 @@ const TextFieldExtId = withStyles((theme) => ({
   },
 }))(TextField);
 
+
 class App extends Component {
   constructor() {
     super();
@@ -65,6 +66,8 @@ class App extends Component {
     this.renameSession = this.renameSession.bind(this);
     this.handleExternalIDChange = this.handleExternalIDChange.bind(this);
     this.SplashBanner = this.SplashBanner.bind(this);
+    this.CreditsBanner = this.CreditsBanner.bind(this);
+    
   }
 
   componentDidMount () {
@@ -159,6 +162,49 @@ class App extends Component {
     );
   }
 
+  CreditsBanner(props) {
+    var devs = [
+      {
+        name: "Sana Suse",
+        github: "https://github.com/sanasc/",
+        img: "https://avatars.githubusercontent.com/u/35238143?v=4",
+        linkedin: 0,
+        email: 0
+      },
+      {
+        name: "Irene Wachirawutthichai",
+        github: "https://github.com/lalinw/",
+        img: "https://avatars.githubusercontent.com/u/12365771?v=4",
+        linkedin: 0,
+        email: 0
+      },
+      {
+        name: "David Kang",
+        github: 0,
+        img: 0,
+        linkedin: 0,
+        email: 0,
+      }  
+    ]
+    
+    return (
+      <div className="banner credits">
+        <h3>Brought to you by:</h3>
+        {devs.map((person) => {
+            return (
+              <div key={person.name} className="person">
+                {person.name}
+                <br/>
+                <a href={person.github}>Github</a> | <a href={person.linkedin}>LinkedIn</a> | <a href={"mailto:" + person.email}>{person.email}</a>  
+              </div>
+            );
+          })
+        }
+       
+      </div>
+    );
+  }
+
   render() {
     if (this.state.sessionID === null) {
       return (
@@ -195,6 +241,7 @@ class App extends Component {
             onClick={ this.createSession }>Use a randomly generated URL</ColorButton>
           <br/>
         </div>
+        <this.CreditsBanner/>
         </React.Fragment>
       );
     } else if (this.state.sessionID === "") {

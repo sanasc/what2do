@@ -90,7 +90,7 @@ class UserList extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="list">
         <p>
           Users in current session:
         </p>

@@ -9,6 +9,7 @@ import {
   ThemeProvider,
 } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -24,6 +25,29 @@ const ColorButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
+const CustomTextField = withStyles((theme) => ({
+  root: {
+    minWidth: "15em",
+    '& label.Mui-focused': {
+      color: "#16796F",
+    },
+    '& input:valid + fieldset': {
+      borderColor: "#7CB7AF",
+      borderWidth: 2,
+    },
+    '& input:invalid + fieldset': {
+      borderColor: "#16796F",
+      borderWidth: 2,
+    },
+    '& input:valid:focus + fieldset': {
+      borderLeftWidth: 6,
+      borderColor: "#16796F",
+      textColor: "#16796F",
+      padding: '4px !important',
+    },
+  },
+}))(TextField);
 
 class ItemInput extends React.Component {
   constructor(props) {
@@ -49,24 +73,18 @@ class ItemInput extends React.Component {
   render() {
     return (
       <div>
-        <ColorButton
-          className ="color-button"
-          variant="contained"
-          color="primary"
-          size="small"
-          disableElevation
-          onClick={ this.props.goBack }>Go back</ColorButton>
-        <br />
-        <br />
-        <label>{this.props.username}, enter value: </label>
         <form>
-          <input type="textarea" name="textValue" id="userinput"
+          <CustomTextField 
+            id="userinput" 
+            label={this.props.username + ", enter an item:"}  
+            variant="outlined" 
+            size="small"
             onChange={this.handleChange}
             onKeyPress={event => {
                 if (event.key === 'Enter') {
                   this.sendItemInput(event)
                 }
-              }}/>
+            }}/>
           <ColorButton
             className ="color-button"
             variant="contained"

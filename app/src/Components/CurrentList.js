@@ -10,6 +10,7 @@ import {
   ThemeProvider,
 } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -25,6 +26,16 @@ const ColorButton = withStyles((theme) => ({
     },
   },
 }))(Button);
+
+const GreenCheckbox = withStyles({
+  root: {
+    color: "#7CB7AF",
+    '&$checked': {
+      color: "#16796F",
+    },
+  },
+  checked: {},
+})(Checkbox);
 
 class CurrentList extends React.Component {
   constructor(props) {
@@ -72,7 +83,7 @@ class CurrentList extends React.Component {
     });
 
     db.collection("items").doc(docName).get().then((doc) => {
-      if (doc.data().count === 0) {
+      if (doc.exists && doc.data().count === 0) {
         db.collection("items").doc(docName).delete().then(() => {
           console.log("Document successfully deleted!");
         }).catch((error) => {
@@ -107,31 +118,22 @@ class CurrentList extends React.Component {
           <li id={i}>
             { itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] 
               ?
-              // <button id={itemName} onClick={this.deleteVote} > Delete </button>
-              <ColorButton
+              <GreenCheckbox 
                 value={itemName}
-                className ="color-button"
-                variant="contained"
-                color="primary"
-                size="small"
-                disableElevation
-                onClick={ this.deleteVote }>Delete</ColorButton>
+                checked={this.state.didVote[i]} 
+                onChange={this.deleteVote} />
               : 
-              // <button id={itemName} onClick={this.addVote} > Vote </button> 
-              <ColorButton
+              <GreenCheckbox 
                 value={itemName}
-                className ="color-button"
-                variant="contained"
-                color="primary"
-                size="small"
-                disableElevation
-                onClick={ this.addVote }>Vote</ColorButton> }
+                checked={this.state.didVote[i]} 
+                onChange={this.addVote} />
+                }
           </li>
         );
       }
 
       return (
-        <div>
+        <div className="list">
           <p>
             Current Items:
           </p>
