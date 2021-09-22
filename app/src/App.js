@@ -100,6 +100,13 @@ class App extends Component {
   createSession() {
     console.log("this.state.tempExternalID: " + this.state.tempExternalID);
     var db = firebase.firestore().collection("sessions");
+
+    if (this.state.tempExternalID.includes("/")) {
+      this.setState({sessionID: null})
+      window.alert("This is an invalid session ID. Please avoid using forward slashes (/).")
+      return
+    }
+
     firebase.firestore().collection("sessions").where("externalID", "==", this.state.tempExternalID).get().then((querySnapshot) => {
       if (!querySnapshot.empty){
         this.setState({sessionID: null})

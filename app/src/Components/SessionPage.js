@@ -208,6 +208,11 @@ class SessionPage extends Component {
     event.preventDefault();
     console.log(this.state.tempExternalID);
 
+    if (this.state.tempExternalID.includes("/")) {
+      window.alert("This is an invalid session ID. Please avoid using forward slashes (/).")
+      return
+    }
+
     firebase.firestore().collection("sessions").doc(this.state.tempExternalID)
       .get().then((doc) => {
         if (doc.exists) {
@@ -225,7 +230,6 @@ class SessionPage extends Component {
           });
         }
     })
-
   }
 
   render() {
@@ -280,7 +284,7 @@ class SessionPage extends Component {
                 sessionID = {this.props.sessionID}
               />
             </div>
-         
+
             <br/>
             <form>
               <CustomTextField id="changeExternalID" label="Change session ID:" variant="outlined" size="small"
