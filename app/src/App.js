@@ -67,7 +67,6 @@ class App extends Component {
     this.handleExternalIDChange = this.handleExternalIDChange.bind(this);
     this.SplashBanner = this.SplashBanner.bind(this);
     this.CreditsBanner = this.CreditsBanner.bind(this);
-
   }
 
   componentDidMount () {
@@ -159,6 +158,12 @@ class App extends Component {
     this.setState({
       externalID: newExternalID
     })
+
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set('session', newExternalID); //this.state.tempExternalID
+    window.history.replaceState({}, '', `${window.location.pathname}?${queryParams}`);
+
+    window.alert("Successfully changed session ID.")
   }
 
   SplashBanner(props) {
@@ -213,7 +218,6 @@ class App extends Component {
             );
           })
         }
-
       </div>
     );
   }

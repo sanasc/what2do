@@ -172,10 +172,8 @@ class SessionPage extends Component {
           docRef.update({
             count: firebase.firestore.FieldValue.increment(1),
             votes: firebase.firestore.FieldValue.arrayUnion(this.state.username)
-
           });
         }
-
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
@@ -218,7 +216,8 @@ class SessionPage extends Component {
         if (doc.exists) {
           window.alert("This session ID is already being used. Please enter a new session ID.")
         } else {
-          firebase.firestore().collection("sessions").where("externalName", "==", this.state.tempExternalID).get().then((querySnapshot) => {
+          firebase.firestore().collection("sessions")
+          .where("externalName", "==", this.state.tempExternalID).get().then((querySnapshot) => {
             if (querySnapshot.empty) {
               this.props.renameSession(this.state.tempExternalID)
             } else {
