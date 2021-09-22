@@ -67,7 +67,7 @@ class App extends Component {
     this.handleExternalIDChange = this.handleExternalIDChange.bind(this);
     this.SplashBanner = this.SplashBanner.bind(this);
     this.CreditsBanner = this.CreditsBanner.bind(this);
-    
+
   }
 
   componentDidMount () {
@@ -168,25 +168,25 @@ class App extends Component {
         name: "Sana Suse",
         github: "https://github.com/sanasc/",
         img: "https://avatars.githubusercontent.com/u/35238143?v=4",
-        linkedin: 0,
-        email: 0
+        linkedin: "https://www.linkedin.com/in/sanasuse/",
+        email: "15sanasc@gmail.com"
       },
       {
         name: "Irene Wachirawutthichai",
         github: "https://github.com/lalinw/",
         img: "https://avatars.githubusercontent.com/u/12365771?v=4",
-        linkedin: 0,
+        linkedin: "https://www.linkedin.com/in/lalinw/",
         email: 0
       },
       {
         name: "David Kang",
-        github: 0,
+        github: "https://github.com/DaviidK",
         img: 0,
         linkedin: 0,
-        email: 0,
-      }  
+        email: "kang.david.j@gmail.com",
+      }
     ]
-    
+
     return (
       <div className="banner credits">
         <h3>Brought to you by:</h3>
@@ -195,12 +195,18 @@ class App extends Component {
               <div key={person.name} className="person">
                 {person.name}
                 <br/>
-                <a href={person.github}>Github</a> | <a href={person.linkedin}>LinkedIn</a> | <a href={"mailto:" + person.email}>{person.email}</a>  
+                <a href={person.github} target="_blank" rel="noopener noreferrer">
+                  Github
+                </a> | <a href={person.linkedin} target="_blank" rel="noopener noreferrer">
+                  LinkedIn
+                </a> | <a href={"mailto:" + person.email} target="_blank" rel="noopener noreferrer">
+                  {person.email}
+                </a>
               </div>
             );
           })
         }
-       
+
       </div>
     );
   }

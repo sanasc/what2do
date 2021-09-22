@@ -73,7 +73,7 @@ div.credits {
   text-align: center;
   bottom: 0;
   margin: auto;
-  background-color: #7CB7AF;
+  background-color: #4F9D92;
 }
 
 #pick-url {
@@ -89,4 +89,8 @@ div.credits {
 .person {
   display: inline-block;
   padding: 0 2em 2em 2em;
+}
+
+a {
+  color: #116159;
 }
