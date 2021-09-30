@@ -36,6 +36,7 @@ const ColorButton = withStyles((theme) => ({
 
 const CustomTextField = withStyles((theme) => ({
   root: {
+    marginLeft: 15,
     minWidth: "15em",
     '& label.Mui-focused': {
       color: "#16796F",
@@ -59,6 +60,7 @@ const CustomTextField = withStyles((theme) => ({
 
 const CustomFormControl = withStyles((theme) => ({
   root: {
+    marginRight: 15,
     minWidth: "8em",
     boxBorderColor: "#16796F",
     '& .Mui-focused': {
@@ -237,30 +239,31 @@ class SessionPage extends Component {
         <React.Fragment>
           <this.props.SplashBanner text="Welcome to your what2do session!"/>
           <div className="general">
-            {/* <form>
-            <label>Log in as: </label>
-              <select defaultValue={"DEFAULT"} onChange={this.handleNameChange}>
-                {this.state.existingUsers}
-              </select> */}
-              <CustomFormControl variant="outlined">
-                <InputLabel htmlFor="outlined-age-native-simple">Log in as:</InputLabel>
-                <Select
-                  native
-                  onChange={this.handleNameChange}
-                  label="Log in as:">
+            <div className="loginContainer">
+              <h3>Select an existing user or enter a new name</h3>
+              {/* <form>
+              <label>Log in as: </label>
+                <select defaultValue={"DEFAULT"} onChange={this.handleNameChange}>
                   {this.state.existingUsers}
-                </Select>
-              </CustomFormControl>
-              <ColorButton
-                className ="color-button"
-                variant="contained"
-                color="primary"
-                size="small"
-                disableElevation
-                onClick={ this.handleNameSubmit }>Go!</ColorButton>
-            {/* </form> */}
-            <p>OR</p>
-            <form>
+                </select> */}
+                <CustomFormControl variant="outlined" size="small">
+                  <InputLabel htmlFor="outlined-age-native-simple">Log in as:</InputLabel>
+                  <Select
+                    native
+                    onChange={this.handleNameChange}
+                    label="Log in as:">
+                    {this.state.existingUsers}
+                  </Select>
+                </CustomFormControl>
+                {/* <ColorButton
+                  className ="color-button"
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  disableElevation
+                  onClick={ this.handleNameSubmit }>Go!</ColorButton> */}
+              {/* </form> */}
+              OR
               <CustomTextField id="nameInput" label="Enter your name:" variant="outlined" size="small"
                 onChange={this.handleNameChange}
                 onKeyPress={event => {
@@ -274,50 +277,55 @@ class SessionPage extends Component {
                 color="primary"
                 size="small"
                 disableElevation
-                onClick={ this.handleNameSubmit }>Submit</ColorButton>
-            </form>
-            <br/>
-            <div>
+                onClick={ this.handleNameSubmit }> Go! </ColorButton>
+              <br/>
+              </div>
+            <div className="loginContainer">
               <UserList
                 username = {this.state.username}
                 sessionID = {this.props.sessionID}
               />
+              <CurrentList
+                sessionID = {this.props.sessionID}
+              />
             </div>
-
             <br/>
-            <form>
-              <CustomTextField id="changeExternalID" label="Change session ID:" variant="outlined" size="small"
-                onChange={this.handleSessionChange}
-                onKeyPress={event => {
-                    if (event.key === 'Enter') {
-                      this.handleSessionSubmit(event)
-                    }
-                }}/>
+            <div className="loginContainer">
+              <h3>Change this What2Do</h3>
+              <form>
+                <CustomTextField id="changeExternalID" label="Change session ID:" variant="outlined" size="small"
+                  onChange={this.handleSessionChange}
+                  onKeyPress={event => {
+                      if (event.key === 'Enter') {
+                        this.handleSessionSubmit(event)
+                      }
+                  }}/>
+                <ColorButton
+                  className ="color-button"
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  disableElevation
+                  onClick={ this.handleSessionSubmit }>Submit</ColorButton>
+              </form>
+              <br/>
               <ColorButton
                 className ="color-button"
                 variant="contained"
                 color="primary"
                 size="small"
                 disableElevation
-                onClick={ this.handleSessionSubmit }>Submit</ColorButton>
-            </form>
-            <br/>
-            <ColorButton
-              className ="color-button"
-              variant="contained"
-              color="primary"
-              size="small"
-              disableElevation
-              onClick={ this.props.resetSession }>Leave session</ColorButton>
-            <ColorButton
-              className ="color-button"
-              variant="contained"
-              color="primary"
-              size="small"
-              disableElevation
-              onClick={ () => {navigator.clipboard.writeText("http://localhost:3000/" + window.location.search)} }>
-              Click to copy session link!
+                onClick={ this.props.resetSession }>Leave session</ColorButton>
+              <ColorButton
+                className ="color-button"
+                variant="contained"
+                color="primary"
+                size="small"
+                disableElevation
+                onClick={ () => {navigator.clipboard.writeText("http://localhost:3000/" + window.location.search)} }>
+                Click to copy session link!
               </ColorButton>
+            </div>
           </div>
         </React.Fragment>
       );

@@ -48,6 +48,19 @@ div.general {
   text-align: center;
 }
 
+div.loginContainer {
+  /* text-align: left; */
+  margin-top: 3em;
+  margin-bottom: 2.5em;
+  text-align: center;
+}
+
+.loginContainer h3 {
+  font-size: 1.5em;
+  color: #116159;
+  margin: .5em;
+}
+
 .color-button {
   margin: 1em 1em;
   padding: 0 1em;
@@ -84,6 +97,17 @@ div.credits {
   /* width: 30%; */
   text-align: left;
   display: inline-block;
+}
+
+.list h3 {
+  text-align: center;
+  font-size: 1.5em;
+  color: #116159;
+  margin: .5em;
+}
+
+li.itemList {
+  font-size: large,
 }
 
 .person {

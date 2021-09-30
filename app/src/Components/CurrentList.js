@@ -42,12 +42,15 @@ class CurrentList extends React.Component {
     super(props);
     this.state = {
       entries: [],
+      voters: [],
       voteCount: [],
       didVote: [],
       isLoaded: false
     }
     this.deleteVote = this.deleteVote.bind(this);
     this.addVote = this.addVote.bind(this);
+    this.renderWithVoting = this.renderWithVoting.bind(this);
+    this.renderWithoutVoting = this.renderWithoutVoting.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +58,7 @@ class CurrentList extends React.Component {
     db.collection("items").orderBy("count", "desc").onSnapshot((querySnapshot) => {
       var localEntries = [];
       var localVoteCount = [];
+      var localVoters = [];
       var localUserVotes = [];
       querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
@@ -62,9 +66,11 @@ class CurrentList extends React.Component {
           localEntries = localEntries.concat(doc.id);
           localVoteCount = localVoteCount.concat(doc.data().count);
           localUserVotes = localUserVotes.concat(doc.data().votes.includes(this.props.username));
+          localVoters.push(doc.data().votes);
       });
       this.setState({
         entries: localEntries,
+        voters: localVoters,
         voteCount: localVoteCount,
         didVote: localUserVotes,
         isLoaded: true
@@ -99,6 +105,66 @@ class CurrentList extends React.Component {
     this.props.receiveItemInput(docName);
   }
 
+  renderWithVoting(){
+    var displayItems = [];
+    for (var i = 0; i < this.state.entries.length; i++) {
+      var itemName = this.state.entries[i];
+      displayItems.push(
+        <li className="itemList">
+          { itemName } - { this.state.voteCount[i] } votes
+          { this.state.didVote[i] 
+            ?
+            <GreenCheckbox 
+              value={itemName}
+              checked={this.state.didVote[i]} 
+              onChange={this.deleteVote} />
+            : 
+            <GreenCheckbox 
+              value={itemName}
+              checked={this.state.didVote[i]} 
+              onChange={this.addVote} />
+          }
+          <br/>
+          (<em>{this.state.voters[i].join(", ")}</em>)
+        </li>
+      );
+    }
+    return (
+      <div className="list">
+        <p>
+          Current Items:
+        </p>
+        <ul>
+          {displayItems}
+        </ul>
+      </div>
+    )
+  }
+
+  renderWithoutVoting(){
+    var displayItems = [];
+    for (var i = 0; i < this.state.entries.length; i++) {
+      var itemName = this.state.entries[i];
+      displayItems.push(
+        <li id={i}>
+          { itemName } - { this.state.voteCount[i] } votes 
+          <br/>
+          (<em>{this.state.voters[i].join(", ")}</em>)
+        </li>
+      );
+    }
+    return (
+      <div className="list">
+        <p>
+          Current Items:
+        </p>
+        <ul>
+          {displayItems}
+        </ul>
+      </div>
+    )
+  }
+
   render() {
     if (!this.state.isLoaded) {
       return (
@@ -110,38 +176,11 @@ class CurrentList extends React.Component {
           </p>
         </div>
       )
-    } else {
-      var displayItems = [];
-      for (var i = 0; i < this.state.entries.length; i++) {
-        var itemName = this.state.entries[i];
-        displayItems.push(
-          <li id={i}>
-            { itemName } - { this.state.voteCount[i] } votes { this.state.didVote[i] 
-              ?
-              <GreenCheckbox 
-                value={itemName}
-                checked={this.state.didVote[i]} 
-                onChange={this.deleteVote} />
-              : 
-              <GreenCheckbox 
-                value={itemName}
-                checked={this.state.didVote[i]} 
-                onChange={this.addVote} />
-                }
-          </li>
-        );
-      }
-
-      return (
-        <div className="list">
-          <p>
-            Current Items:
-          </p>
-          <ul>
-            {displayItems}
-          </ul>
-        </div>
-      )
+    } else if (this.props.username != null) {
+      return <this.renderWithVoting/>;
+    }
+    else {
+      return <this.renderWithoutVoting/>;
     }
   }
 }
