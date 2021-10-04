@@ -67,6 +67,7 @@ class App extends Component {
     this.handleExternalIDChange = this.handleExternalIDChange.bind(this);
     this.SplashBanner = this.SplashBanner.bind(this);
     this.CreditsBanner = this.CreditsBanner.bind(this);
+    this.Blurb = this.Blurb.bind(this);
   }
 
   componentDidMount () {
@@ -89,6 +90,15 @@ class App extends Component {
         }
       })
     }
+  }
+
+  componentWillUnmount() {
+    // get current timestamp
+
+    // access firebase
+
+    // if creationDate + validDays is before today
+    // then delete document
   }
 
   handleExternalIDChange = event => {
@@ -170,6 +180,15 @@ class App extends Component {
     return (
       <div className="banner splash">
         <h1>{props.text}</h1>
+      </div>
+    );
+  }
+
+  Blurb(props) {
+    var text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel libero mollis tortor congue facilisis ut eu nisi. Vivamus eget ex scelerisque augue dignissim tristique. Aliquam porttitor nisl hendrerit diam ullamcorper, quis aliquam ipsum pharetra. Sed pharetra accumsan maximus. Vestibulum at ornare mauris. Etiam laoreet eros congue leo dapibus maximus. Curabitur orci eros, blandit eget purus nec, malesuada mattis massa. Mauris consequat, magna vel tempor vehicula, erat arcu vulputate ipsum, in rutrum ipsum nisi sit amet ipsum. Cras euismod porttitor quam, in laoreet orci tempus egestas. Donec cursus nunc ac quam vestibulum lacinia sit amet sit amet lorem. Donec dictum turpis est, sed fringilla leo pretium ac. Aenean luctus sapien sit amet libero consectetur, et sagittis purus ornare. Donec fermentum nulla et gravida maximus. Mauris tellus nibh, scelerisque congue turpis id, vestibulum sollicitudin nisl. Curabitur quis lectus commodo, porta felis consequat, iaculis elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla finibus aliquam vehicula.";
+    return (
+      <div className="summary">
+        {text}
       </div>
     );
   }
@@ -258,6 +277,7 @@ class App extends Component {
             onClick={ this.createSession }>Use a randomly generated URL</ColorButton>
           <br/>
         </div>
+        <this.Blurb/>
         <this.CreditsBanner/>
         </React.Fragment>
       );

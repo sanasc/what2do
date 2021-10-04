@@ -76,6 +76,17 @@ body {
   background-color: #CADEDF;
 }
 
+.summary {
+  width: 30%;
+  background-color: #7CB7AF;
+  color: #116159;
+  text-align: center;
+  margin: auto;
+  margin-top: 3em;
+  padding: 1em;
+  border-radius: 10px;
+}
+
 .banner {
   background-color: #16796F;
   width: 100%;
