@@ -194,7 +194,7 @@ class App extends Component {
         name: "David Kang",
         github: "https://github.com/DaviidK",
         img: 0,
-        linkedin: 0,
+        linkedin: "https://www.linkedin.com/in/david-j-kang",
         email: "kang.david.j@gmail.com",
       }
     ]
