@@ -46,6 +46,10 @@ div.general {
   text-align: center;
 }
 
+.splash h2 {
+  color: #116159;
+}
+
 div.loginContainer {
   margin-top: 3em;
   margin-bottom: 2.5em;
