@@ -42,17 +42,15 @@
 /* ========================= */
 
 div.general {
-  /* text-align: left; */
   margin-top: 3em;
-  margin-left: 3em;
   text-align: center;
 }
 
 div.loginContainer {
-  /* text-align: left; */
   margin-top: 3em;
   margin-bottom: 2.5em;
   text-align: center;
+  padding: 0 25% 0 25%;
 }
 
 .loginContainer h3 {
@@ -93,21 +91,35 @@ div.credits {
   width: 100%;
 }
 
+.row {
+  display: flex;
+}
+
 .list {
-  /* width: 30%; */
-  text-align: left;
-  display: inline-block;
+  text-align: center;
+  flex: 20%;
 }
 
 .list h3 {
   text-align: center;
   font-size: 1.5em;
   color: #116159;
-  margin: .5em;
+}
+
+.list em {
+  margin-left: 21px;
+}
+
+ul {
+  list-style-position: inside;
+  padding: 0;
+  display: inline-block;
+  text-align: left;
 }
 
 li.itemList {
-  font-size: large,
+  font-size: large;
+  margin-bottom: 0.5em;
 }
 
 .person {

@@ -33,6 +33,7 @@ const GreenCheckbox = withStyles({
     '&$checked': {
       color: "#16796F",
     },
+    padding: "0 0 0 0.5em",
   },
   checked: {},
 })(Checkbox);
@@ -112,28 +113,28 @@ class CurrentList extends React.Component {
       displayItems.push(
         <li className="itemList">
           { itemName } - { this.state.voteCount[i] } votes
-          { this.state.didVote[i] 
+          { this.state.didVote[i]
             ?
-            <GreenCheckbox 
+            <GreenCheckbox
               value={itemName}
-              checked={this.state.didVote[i]} 
+              checked={this.state.didVote[i]}
               onChange={this.deleteVote} />
-            : 
-            <GreenCheckbox 
+            :
+            <GreenCheckbox
               value={itemName}
-              checked={this.state.didVote[i]} 
+              checked={this.state.didVote[i]}
               onChange={this.addVote} />
           }
           <br/>
-          (<em>{this.state.voters[i].join(", ")}</em>)
+          <em>({this.state.voters[i].join(", ")})</em>
         </li>
       );
     }
     return (
       <div className="list">
-        <p>
+        <h3>
           Current Items:
-        </p>
+        </h3>
         <ul>
           {displayItems}
         </ul>
@@ -147,17 +148,17 @@ class CurrentList extends React.Component {
       var itemName = this.state.entries[i];
       displayItems.push(
         <li id={i}>
-          { itemName } - { this.state.voteCount[i] } votes 
+          { itemName } - { this.state.voteCount[i] } votes
           <br/>
-          (<em>{this.state.voters[i].join(", ")}</em>)
+          <em>({this.state.voters[i].join(", ")})</em>
         </li>
       );
     }
     return (
       <div className="list">
-        <p>
+        <h3>
           Current Items:
-        </p>
+        </h3>
         <ul>
           {displayItems}
         </ul>

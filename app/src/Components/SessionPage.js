@@ -281,13 +281,15 @@ class SessionPage extends Component {
               <br/>
               </div>
             <div className="loginContainer">
-              <UserList
-                username = {this.state.username}
-                sessionID = {this.props.sessionID}
-              />
-              <CurrentList
-                sessionID = {this.props.sessionID}
-              />
+              <div className="row">
+                <UserList
+                  username = {this.state.username}
+                  sessionID = {this.props.sessionID}
+                />
+                <CurrentList
+                  sessionID = {this.props.sessionID}
+                />
+              </div>
             </div>
             <br/>
             <div className="loginContainer">
