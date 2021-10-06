@@ -110,10 +110,10 @@ class App extends Component {
     console.log("this.state.tempExternalID: " + this.state.tempExternalID);
     var db = firebase.firestore().collection("sessions");
 
-    if (this.state.tempExternalID.includes("/")) {
+    if (this.state.tempExternalID != null && this.state.tempExternalID.includes("/")) {
       this.setState({sessionID: null})
       window.alert("This is an invalid session ID. Please avoid using forward slashes (/).")
-      return
+      return;
     }
 
     firebase.firestore().collection("sessions").where("externalID", "==", this.state.tempExternalID).get().then((querySnapshot) => {
@@ -185,10 +185,14 @@ class App extends Component {
   }
 
   Blurb(props) {
-    var text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel libero mollis tortor congue facilisis ut eu nisi. Vivamus eget ex scelerisque augue dignissim tristique. Aliquam porttitor nisl hendrerit diam ullamcorper, quis aliquam ipsum pharetra. Sed pharetra accumsan maximus. Vestibulum at ornare mauris. Etiam laoreet eros congue leo dapibus maximus. Curabitur orci eros, blandit eget purus nec, malesuada mattis massa. Mauris consequat, magna vel tempor vehicula, erat arcu vulputate ipsum, in rutrum ipsum nisi sit amet ipsum. Cras euismod porttitor quam, in laoreet orci tempus egestas. Donec cursus nunc ac quam vestibulum lacinia sit amet sit amet lorem. Donec dictum turpis est, sed fringilla leo pretium ac. Aenean luctus sapien sit amet libero consectetur, et sagittis purus ornare. Donec fermentum nulla et gravida maximus. Mauris tellus nibh, scelerisque congue turpis id, vestibulum sollicitudin nisl. Curabitur quis lectus commodo, porta felis consequat, iaculis elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla finibus aliquam vehicula.";
+    var introText = "What2Do is a multipurpose polling tool designed to facilitate group decisions. Users can brainstorm ideas together, vote on their favorites, and then select the most popular option(s).";
+    var walkthroughText = "To begin, select a personalized URL or let What2Do automatically generate one - this will be used to share & access your What2Do in the future! ";
     return (
       <div className="summary">
-        {text}
+        {introText}
+        <br/>
+        <br/>
+        {walkthroughText}
       </div>
     );
   }
@@ -198,21 +202,18 @@ class App extends Component {
       {
         name: "Sana Suse",
         github: "https://github.com/sanasc/",
-        img: "https://avatars.githubusercontent.com/u/35238143?v=4",
         linkedin: "https://www.linkedin.com/in/sanasuse/",
         email: "15sanasc@gmail.com"
       },
       {
         name: "Irene Wachirawutthichai",
         github: "https://github.com/lalinw/",
-        img: "https://avatars.githubusercontent.com/u/12365771?v=4",
         linkedin: "https://www.linkedin.com/in/lalinw/",
-        email: 0
+        email: "i.lalinw@gmail.com"
       },
       {
         name: "David Kang",
         github: "https://github.com/DaviidK",
-        img: 0,
         linkedin: "https://www.linkedin.com/in/david-j-kang",
         email: "kang.david.j@gmail.com",
       }
