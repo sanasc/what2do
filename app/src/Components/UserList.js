@@ -1,6 +1,31 @@
 import React from 'react';
 import firebase from '../firebase';
 
+import {
+  createTheme,
+  createStyles,
+  withStyles,
+  makeStyles,
+  Theme,
+  ThemeProvider,
+} from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
+const ColorButton = withStyles((theme) => ({
+  root: {
+    // textTransform: "none",
+    color: theme.palette.getContrastText("#7CB7AF"),
+    backgroundColor: "#7CB7AF",
+    margin: "0 1em",
+    '&:hover': {
+      backgroundColor: "#16796F",
+    },
+    '&:disabled': {
+      backgroundColor: "#9CA89E",
+    },
+  },
+}))(Button);
+
 class UserList extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +49,7 @@ class UserList extends React.Component {
   }
 
   deleteUser(e) {
-    var username = e.target.id;
+    var username = e.currentTarget.value;
     if (window.confirm("You are about to delete user " + username + " and all their votes.\nProceed?")) {
       var db = firebase.firestore().collection("sessions").doc(this.props.sessionID);
 
@@ -65,15 +90,23 @@ class UserList extends React.Component {
 
   render() {
     return (
-      <div>
-        <p>
-          Users in current session:
-        </p>
+      <div className="list">
+        <h3>
+          Users in Current Session:
+        </h3>
         <ul>
           {this.state.users.map((eachUser) => {
             return (
               <li key={eachUser}>
-                {eachUser} <button id={eachUser} onClick={this.deleteUser}> Remove User </button>
+                {eachUser}
+                <ColorButton
+                  value={eachUser}
+                  className ="color-button"
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  disableElevation
+                  onClick={ this.deleteUser }>Remove User</ColorButton>
               </li>
             );
           })}

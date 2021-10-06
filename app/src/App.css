@@ -1,10 +1,6 @@
-div.general {
-  /* text-align: center; */
-  margin-top: 3em;
-  margin-left: 3em;
-}
 
-.App {
+
+/* .App {
   text-align: center;
 }
 
@@ -41,4 +37,121 @@ div.general {
   to {
     transform: rotate(360deg);
   }
+} */
+
+/* ========================= */
+
+div.general {
+  margin-top: 3em;
+  text-align: center;
+}
+
+.splash h2 {
+  color: #116159;
+}
+
+div.loginContainer {
+  margin-top: 3em;
+  margin-bottom: 2.5em;
+  text-align: center;
+  padding: 0 25% 0 25%;
+}
+
+.loginContainer h3 {
+  font-size: 1.5em;
+  color: #116159;
+  margin: .5em;
+}
+
+.color-button {
+  margin: 1em 1em;
+  padding: 0 1em;
+}
+
+div.splash {
+  text-align: center;
+}
+
+body {
+  background-color: #CADEDF;
+}
+
+.summary {
+  width: 30%;
+  background-color: #7CB7AF;
+  color: #116159;
+  text-align: center;
+  margin: auto;
+  margin-top: 3em;
+  padding: 1em;
+  border-radius: 10px;
+}
+
+.banner {
+  background-color: #16796F;
+  width: 100%;
+  display: inline-block;
+  color: #DFE7E7;
+}
+
+div.credits {
+  position: absolute;
+  text-align: center;
+  bottom: 0;
+  margin: auto;
+  background-color: #4F9D92;
+}
+
+#pick-url {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+}
+
+.list {
+  text-align: center;
+  flex: 20%;
+}
+
+.list h3 {
+  text-align: center;
+  font-size: 1.5em;
+  color: #116159;
+}
+
+.list em {
+  margin-left: 20px;
+}
+
+ul {
+  list-style-position: inside;
+  padding: 0;
+  display: inline-block;
+  text-align: left;
+}
+
+li.itemList {
+  font-size: large;
+  margin-bottom: 0.5em;
+}
+
+.instructionList {
+  margin-left: 0;
+  padding: 0 3em;
+  text-align: center;
+}
+
+ol.instructionList > li {
+  text-align: left;
+}
+
+.person {
+  display: inline-block;
+  padding: 0 2em 2em 2em;
+}
+
+a {
+  color: #116159;
 }
