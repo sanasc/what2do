@@ -237,7 +237,7 @@ class SessionPage extends Component {
     if (!this.state.hasName) {
       return(
         <React.Fragment>
-          <this.props.SplashBanner text="Welcome to your what2do session!"/>
+          <this.props.SplashBanner text="Welcome to your What2Do session!"/>
           <div className="general">
             <div className="loginContainer">
               <h3>Select an existing user or enter a new name</h3>

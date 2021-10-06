@@ -92,7 +92,7 @@ class UserList extends React.Component {
     return (
       <div className="list">
         <h3>
-          Users in current session:
+          Users in Current Session:
         </h3>
         <ul>
           {this.state.users.map((eachUser) => {

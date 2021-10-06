@@ -137,6 +137,16 @@ li.itemList {
   margin-bottom: 0.5em;
 }
 
+.instructionList {
+  margin-left: 0;
+  padding: 0 3em;
+  text-align: center;
+}
+
+ol.instructionList > li {
+  text-align: left;
+}
+
 .person {
   display: inline-block;
   padding: 0 2em 2em 2em;

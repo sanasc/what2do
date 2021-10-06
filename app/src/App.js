@@ -186,13 +186,20 @@ class App extends Component {
 
   Blurb(props) {
     var introText = "What2Do is a multipurpose polling tool designed to facilitate group decisions. Users can brainstorm ideas together, vote on their favorites, and then select the most popular option(s).";
-    var walkthroughText = "To begin, select a personalized URL or let What2Do automatically generate one - this will be used to share & access your What2Do in the future! ";
+    var walkthroughText = "Here's how to get started:";
+    // "To begin, select a personalized URL or let What2Do automatically generate one - this will be used to share & access your What2Do in the future! The next page shows ";
     return (
       <div className="summary">
         {introText}
         <br/>
         <br/>
-        {walkthroughText}
+        
+        <ol className="instructionList">
+          <strong>{walkthroughText}</strong>
+          <li> Select a personalized URL or let What2Do generate one - this will be used to share & access your What2Do in the future!</li>
+          <li> Create a username that will represent your votes</li>
+          <li> Vote for existing items or add your own to the poll!</li>
+        </ol>
       </div>
     );
   }
@@ -247,7 +254,7 @@ class App extends Component {
       return (
         <React.Fragment>
 
-        <this.SplashBanner text="Welcome to what2do"/>
+        <this.SplashBanner text="Welcome to What2Do"/>
         <div className="splash">
 
           <h2>Create a new session below!</h2>
