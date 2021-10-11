@@ -95,6 +95,7 @@ class SessionPage extends Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSessionChange = this.handleSessionChange.bind(this);
     this.handleSessionSubmit = this.handleSessionSubmit.bind(this);
+    this.handleExpirationExtension = this.handleExpirationExtension.bind(this);
   }
 
   componentDidMount () {
@@ -124,26 +125,6 @@ class SessionPage extends Component {
       })
     });
   }
-
-  // componentDidUnmount() {
-  //   console.log("sessionPage will unmount");
-  //   // get current timestamp
-  //   // access firebase
-  //   // if today > expiration date
-  //   // then delete document
-  //   firebase.firestore().collection("sessions").get()
-  //   .then((querySnapshot) => {
-  //     var today = new Date();
-  //     querySnapshot.forEach((doc) => {
-  //       if (doc.data().expirationDate.toDate() < today) {
-  //         console.log("expiration date has passed");
-  //         doc.ref.delete().then(() => {
-  //           console.log("document has been deleted due to exp date");
-  //         });
-  //       }
-  //     });
-  //   });
-  // }
 
   handleNameChange = event => {
     event.preventDefault();
@@ -176,6 +157,24 @@ class SessionPage extends Component {
         }
       });
     }
+  }
+
+  handleExpirationExtension(days) {
+    var newExpDate = this.state.expDate;
+    newExpDate.setDate(newExpDate.getDate() + days);
+    //update expirationDate on firestore
+    firebase.firestore().collection("sessions").doc(this.props.sessionID).get().then((querySnapshot) => {
+      console.log(newExpDate);
+      querySnapshot.set({
+        expirationDate: firebase.firestore.Timestamp.fromDate(newExpDate)
+      }, {merge: true}).then(() => {
+        console.log("expiration date has been extended by 30d on firestore");
+      })
+    }).catch((error) => {});
+    //update state
+    this.setState({
+      expDate: newExpDate
+    })
   }
 
   resetName = () => {
@@ -318,7 +317,18 @@ class SessionPage extends Component {
             <div className="loginContainer">
               <h3>Change this What2Do</h3>
               {this.state.expDate !== null 
-              && <p>This session expires on <strong>{this.state.expDate.toString().substring(0, 24)}</strong></p>}
+              &&
+                <p>
+                  This session expires on <strong>{this.state.expDate.toString().substring(0, 24)}</strong>
+                <ColorButton
+                  className ="color-button"
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  disableElevation
+                  onClick={ () => this.handleExpirationExtension(30) }> extend by 30 days </ColorButton>
+                </p>
+              }
 
               <form>
                 <CustomTextField id="changeExternalID" label="Change session ID:" variant="outlined" size="small"
