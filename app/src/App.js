@@ -121,9 +121,13 @@ class App extends Component {
         this.setState({sessionID: null})
         window.alert("This session ID already exists.\nPlease input a different session ID.")
       } else {
+        var expDate = new Date();
+        expDate.setDate(expDate.getDate() + 30);
+
         db.add({
           users: [],
-          externalID: ""
+          externalID: "",
+          expirationDate: firebase.firestore.Timestamp.fromDate(expDate)
         })
         .then((doc) => {
           console.log("Document successfully written! Doc.id: " + doc.id);
