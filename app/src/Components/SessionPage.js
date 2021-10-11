@@ -89,7 +89,8 @@ class SessionPage extends Component {
       username: "",
       hasName: false,
       existingUsers: [],
-      tempExternalID: ""
+      tempExternalID: "",
+      expDate: null
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSessionChange = this.handleSessionChange.bind(this);
@@ -118,7 +119,8 @@ class SessionPage extends Component {
         );
       })
       this.setState({
-        existingUsers: localExistingUsers
+        existingUsers: localExistingUsers,
+        expDate: doc.data().expirationDate.toDate()
       })
     });
   }
@@ -234,6 +236,7 @@ class SessionPage extends Component {
   }
 
   render() {
+    console.log(this.state.expDate);
     if (!this.state.hasName) {
       return(
         <React.Fragment>
@@ -294,6 +297,9 @@ class SessionPage extends Component {
             <br/>
             <div className="loginContainer">
               <h3>Change this What2Do</h3>
+              {this.state.expDate !== null 
+              && <p>This session expires on <strong>{this.state.expDate.toString().substring(0, 24)}</strong></p>}
+
               <form>
                 <CustomTextField id="changeExternalID" label="Change session ID:" variant="outlined" size="small"
                   onChange={this.handleSessionChange}
