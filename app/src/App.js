@@ -90,15 +90,19 @@ class App extends Component {
         }
       })
     }
-  }
 
-  componentWillUnmount() {
-    // get current timestamp
-
-    // access firebase
-
-    // if creationDate + validDays is before today
-    // then delete document
+    // check for expired sessions to delete
+    firebase.firestore().collection("sessions").get()
+    .then((querySnapshot) => {
+      var today = new Date();
+      querySnapshot.forEach((doc) => {
+        if (doc.data().expirationDate.toDate() < today) {
+          doc.ref.delete().then(() => {
+            console.log("expired documment has been deleted");
+          });
+        }
+      });
+    });
   }
 
   handleExternalIDChange = event => {

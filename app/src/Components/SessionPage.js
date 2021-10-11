@@ -125,6 +125,26 @@ class SessionPage extends Component {
     });
   }
 
+  // componentDidUnmount() {
+  //   console.log("sessionPage will unmount");
+  //   // get current timestamp
+  //   // access firebase
+  //   // if today > expiration date
+  //   // then delete document
+  //   firebase.firestore().collection("sessions").get()
+  //   .then((querySnapshot) => {
+  //     var today = new Date();
+  //     querySnapshot.forEach((doc) => {
+  //       if (doc.data().expirationDate.toDate() < today) {
+  //         console.log("expiration date has passed");
+  //         doc.ref.delete().then(() => {
+  //           console.log("document has been deleted due to exp date");
+  //         });
+  //       }
+  //     });
+  //   });
+  // }
+
   handleNameChange = event => {
     event.preventDefault();
     this.setState({ username:event.target.value });
