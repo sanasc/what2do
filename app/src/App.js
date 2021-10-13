@@ -73,8 +73,10 @@ class App extends Component {
   componentDidMount () {
     const queryParams = new URLSearchParams(window.location.search);
     const URLName = queryParams.get('session');
+    var db = firebase.firestore().collection("sessions");
+
     if (URLName !== "" && URLName !== null) {
-      firebase.firestore().collection("sessions").where("externalID", "==", URLName).get().then((querySnapshot) => {
+      db.where("externalID", "==", URLName).get().then((querySnapshot) => {
         if (!querySnapshot.empty) {
           querySnapshot.forEach((doc) => {
             this.setState({
@@ -92,12 +94,11 @@ class App extends Component {
     }
 
     // check for expired sessions to delete
-    firebase.firestore().collection("sessions").get()
-    .then((querySnapshot) => {
+    db.get().then((querySnapshot) => {
       var today = new Date();
       querySnapshot.forEach((doc) => {
         if (doc.data().expirationDate.toDate() < today) {
-          firebase.firestore().collection("sessions").doc(doc.id).collection("items").get().then((subQuerySnapshot) => {
+          db.doc(doc.id).collection("items").get().then((subQuerySnapshot) => {
             subQuerySnapshot.forEach((subDoc) => {
               subDoc.ref.delete().then(() => {
                 console.log("documents in subcollection of expired document has been deleted")
@@ -127,7 +128,7 @@ class App extends Component {
       return;
     }
 
-    firebase.firestore().collection("sessions").where("externalID", "==", this.state.tempExternalID).get().then((querySnapshot) => {
+    db.where("externalID", "==", this.state.tempExternalID).get().then((querySnapshot) => {
       if (!querySnapshot.empty){
         this.setState({sessionID: null})
         window.alert("This session ID already exists.\nPlease input a different session ID.")

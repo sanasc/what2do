@@ -203,11 +203,10 @@ class SessionPage extends Component {
         console.log("No such document!");
 
         // Create the document
-        firebase.firestore().collection("sessions").doc(this.props.sessionID)
-                            .collection("items").doc(currentInput).set({
-                              votes: [ this.state.username ],
-                              count: 1
-                            })
+        docRef.set({
+          votes: [ this.state.username ],
+          count: 1
+        })
         .then(() => {
             console.log("Document successfully written!");
         })
