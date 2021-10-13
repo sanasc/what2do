@@ -97,6 +97,13 @@ class App extends Component {
       var today = new Date();
       querySnapshot.forEach((doc) => {
         if (doc.data().expirationDate.toDate() < today) {
+          firebase.firestore().collection("sessions").doc(doc.id).collection("items").get().then((subQuerySnapshot) => {
+            subQuerySnapshot.forEach((subDoc) => {
+              subDoc.ref.delete().then(() => {
+                console.log("documents in subcollection of expired document has been deleted")
+              })
+            })
+          })
           doc.ref.delete().then(() => {
             console.log("expired documment has been deleted");
           });
@@ -201,7 +208,7 @@ class App extends Component {
         {introText}
         <br/>
         <br/>
-        
+
         <ol className="instructionList">
           <strong>{walkthroughText}</strong>
           <li> Select a personalized URL or let What2Do generate one - this will be used to share & access your What2Do in the future!</li>
