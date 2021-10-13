@@ -29,7 +29,7 @@ const ColorButton = withStyles((theme) => ({
       backgroundColor: "#16796F",
     },
     '&:disabled': {
-      backgroundColor: "#9CA89E",
+      backgroundColor: "#9EB7B4",
     },
   },
 }))(Button);
@@ -317,7 +317,7 @@ class SessionPage extends Component {
             <br/>
             <div className="loginContainer">
               <h3>Change this What2Do</h3>
-              {this.state.expDate !== null 
+              {this.state.expDate !== null
               &&
                 <p>
                   This session expires on <strong>{this.state.expDate.toString().substring(0, 24)}</strong>
@@ -345,6 +345,7 @@ class SessionPage extends Component {
                   color="primary"
                   size="small"
                   disableElevation
+                  disabled={ this.state.tempExternalID === "" }
                   onClick={ this.handleSessionSubmit }>Submit</ColorButton>
               </form>
               <br/>
