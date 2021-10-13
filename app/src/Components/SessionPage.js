@@ -235,14 +235,14 @@ class SessionPage extends Component {
       return
     }
 
-    firebase.firestore().collection("sessions").doc(this.state.tempExternalID)
-      .get().then((doc) => {
-        if (doc.exists) {
+    var queryDB = firebase.firestore().collection("sessions").where("externalID", "==", this.state.tempExternalID);
+
+    queryDB.get().then((querySnapshot) => {
+        if (!querySnapshot.empty) {
           window.alert("This session ID is already being used. Please enter a new session ID.")
         } else {
-          firebase.firestore().collection("sessions")
-          .where("externalName", "==", this.state.tempExternalID).get().then((querySnapshot) => {
-            if (querySnapshot.empty) {
+          queryDB.get().then((innerQuerySnapshot) => {
+            if (innerQuerySnapshot.empty) {
               this.props.renameSession(this.state.tempExternalID)
             } else {
               window.alert("This session ID is already being used. Please enter a new session ID.")
