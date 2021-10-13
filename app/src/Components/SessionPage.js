@@ -139,17 +139,21 @@ class SessionPage extends Component {
       this.setState({ hasName: true })
 
       var docRef = firebase.firestore().collection("sessions").doc(this.props.sessionID);
+      var trimmedName = this.state.username.trim();
+      this.setState({
+        username: trimmedName
+      })
 
       docRef.get().then((doc) => {
         if (doc.exists) {
           console.log("Document data:", doc.data());
-          if (doc.data().users.includes(this.state.username)) {
+          if (doc.data().users.includes(trimmedName)) {
             // Potentially special treatment for returning users (frontend things)
           }
 
           // This method only adds elements not already present
           return docRef.update({
-            users: firebase.firestore.FieldValue.arrayUnion(this.state.username)
+            users: firebase.firestore.FieldValue.arrayUnion(trimmedName)
           });
         } else {
           // doc.data() will be undefined in this case
