@@ -163,11 +163,12 @@ class SessionPage extends Component {
     var newExpDate = this.state.expDate;
     newExpDate.setDate(newExpDate.getDate() + days);
     //update expirationDate on firestore
-    firebase.firestore().collection("sessions").doc(this.props.sessionID).get().then((querySnapshot) => {
+    var docRef = firebase.firestore().collection("sessions").doc(this.props.sessionID);
+    docRef.get().then((doc) => {
       console.log(newExpDate);
-      querySnapshot.set({
+      docRef.update({
         expirationDate: firebase.firestore.Timestamp.fromDate(newExpDate)
-      }, {merge: true}).then(() => {
+      }).then(() => {
         console.log("expiration date has been extended by 30d on firestore");
       })
     }).catch((error) => {});
