@@ -90,12 +90,14 @@ class SessionPage extends Component {
       hasName: false,
       existingUsers: [],
       tempExternalID: "",
-      expDate: null
+      expDate: null,
+      tempExpDate: null
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSessionChange = this.handleSessionChange.bind(this);
     this.handleSessionSubmit = this.handleSessionSubmit.bind(this);
     this.handleExpirationExtension = this.handleExpirationExtension.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   componentDidMount () {
@@ -163,9 +165,11 @@ class SessionPage extends Component {
     }
   }
 
-  handleExpirationExtension(days) {
-    var newExpDate = this.state.expDate;
-    newExpDate.setDate(newExpDate.getDate() + days);
+  handleExpirationExtension() {
+    var newExpDate = this.state.tempExpDate;
+
+    // Check if newExpDate is before today or within 5 days from today
+
     //update expirationDate on firestore
     var docRef = firebase.firestore().collection("sessions").doc(this.props.sessionID);
     docRef.get().then((doc) => {
@@ -173,7 +177,7 @@ class SessionPage extends Component {
       docRef.update({
         expirationDate: firebase.firestore.Timestamp.fromDate(newExpDate)
       }).then(() => {
-        console.log("expiration date has been extended by 30d on firestore");
+        console.log("expiration date has been changed to ", this.state.tempExpDate);
       })
     }).catch((error) => {});
     //update state
@@ -258,8 +262,22 @@ class SessionPage extends Component {
     })
   }
 
+  handleDateChange = event => {
+    var inputDate = event.target.value;
+    console.log(inputDate);
+    var currDate = new Date();
+    currDate.setFullYear(inputDate.substring(0,4));
+    currDate.setMonth(parseInt(inputDate.substring(5,7)) - 1);
+    currDate.setDate(inputDate.substring(8));
+    console.log(currDate);
+    this.setState({
+      tempExpDate: currDate
+    })
+  }
+
   render() {
     console.log(this.state.expDate);
+
     if (!this.state.hasName) {
       return(
         <React.Fragment>
@@ -322,16 +340,38 @@ class SessionPage extends Component {
               <h3>Change this What2Do</h3>
               {this.state.expDate !== null
               &&
+                <div>
                 <p>
                   This session expires on <strong>{this.state.expDate.toString().substring(0, 24)}</strong>
+                </p>
+                <TextField
+                  id="date"
+                  label="Set new expiration Date"
+                  type="date"
+                  minDate={new Date()}
+                  onChange={this.handleDateChange}
+                  defaultValue={this.state.expDate.getFullYear() + "-" // TODO: this does not work for months >= 10 and dates >= 10
+                                + (this.state.expDate.getMonth() + 1 < 10 && "0")
+                                + (this.state.expDate.getMonth() + 1) + "-"
+                                + (this.state.expDate.getDate() < 10 && "0")
+                                + this.state.expDate.getDate()}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  inputProps={{
+                    min: "2021-10-13" // TODO: Change this to be dynamic (today's date)
+                  }}
+                />
                 <ColorButton
                   className ="color-button"
                   variant="contained"
                   color="primary"
                   size="small"
                   disableElevation
-                  onClick={ () => this.handleExpirationExtension(30) }> extend by 30 days </ColorButton>
-                </p>
+                  onClick={ () => this.handleExpirationExtension() }> Submit </ColorButton>
+                <br/><br/>
+                </div>
+
               }
 
               <form>
