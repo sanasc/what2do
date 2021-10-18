@@ -275,7 +275,16 @@ class SessionPage extends Component {
     })
   }
 
+  dateToString = (date) => {
+    return date.getFullYear() + "-"
+            + ('0' + (date.getMonth() + 1)).slice(-2) + "-"
+            + ('0' + (date.getDate())).slice(-2);
+  }
+
   render() {
+    var tomorrow = new Date();
+    tomorrow.setDate((new Date()).getDate() + 1);
+
     console.log(this.state.expDate);
 
     if (!this.state.hasName) {
@@ -348,18 +357,13 @@ class SessionPage extends Component {
                   id="date"
                   label="Set new expiration Date"
                   type="date"
-                  minDate={new Date()}
                   onChange={this.handleDateChange}
-                  defaultValue={this.state.expDate.getFullYear() + "-" // TODO: this does not work for months >= 10 and dates >= 10
-                                + (this.state.expDate.getMonth() + 1 < 10 && "0")
-                                + (this.state.expDate.getMonth() + 1) + "-"
-                                + (this.state.expDate.getDate() < 10 && "0")
-                                + this.state.expDate.getDate()}
+                  defaultValue={this.dateToString(this.state.expDate)}
                   InputLabelProps={{
                     shrink: true
                   }}
                   inputProps={{
-                    min: "2021-10-13" // TODO: Change this to be dynamic (today's date)
+                    min: this.dateToString(tomorrow) // TODO: Change this to be dynamic (today's date)
                   }}
                 />
                 <ColorButton
