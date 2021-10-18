@@ -155,3 +155,9 @@ ol.instructionList > li {
 a {
   color: #116159;
 }
+
+.child {
+  margin-left:1em;
+  margin-bottom:0.6em;
+  display:inline-block;
+}

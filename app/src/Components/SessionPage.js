@@ -350,30 +350,27 @@ class SessionPage extends Component {
               {this.state.expDate !== null
               &&
                 <div>
-                <p>
-                  This session expires on <strong>{this.state.expDate.toString().substring(0, 24)}</strong>
-                </p>
-                <TextField
-                  id="date"
-                  label="Set new expiration Date"
-                  type="date"
-                  onChange={this.handleDateChange}
-                  defaultValue={this.dateToString(this.state.expDate)}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  inputProps={{
-                    min: this.dateToString(tomorrow) // TODO: Change this to be dynamic (today's date)
-                  }}
-                />
-                <ColorButton
-                  className ="color-button"
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  disableElevation
-                  onClick={ () => this.handleExpirationExtension() }> Submit </ColorButton>
-                <br/><br/>
+                  This session expires on
+                  <div className="child">
+                    <TextField
+                      id="date"
+                      type="date"
+                      onChange={this.handleDateChange}
+                      defaultValue={this.dateToString(this.state.expDate)}
+                      inputProps={{
+                        min: this.dateToString(tomorrow)
+                      }}
+                    />
+
+                  <ColorButton
+                    className ="color-button"
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    disableElevation
+                    onClick={ () => this.handleExpirationExtension() }> Update </ColorButton>
+                  </div>
+                  <br/>
                 </div>
 
               }
