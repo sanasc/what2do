@@ -136,7 +136,7 @@ class CurrentList extends React.Component {
           Current Items:
         </h3>
         <ul>
-          {displayItems}
+          {displayItems.length == 0 ? "No items. Add an item to display here." : displayItems}
         </ul>
       </div>
     )
@@ -160,7 +160,7 @@ class CurrentList extends React.Component {
           Current Items:
         </h3>
         <ul>
-          {displayItems}
+          {displayItems.length == 0 ? "No items. Add an item to display here." : displayItems}
         </ul>
       </div>
     )

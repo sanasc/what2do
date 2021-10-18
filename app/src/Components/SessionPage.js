@@ -29,7 +29,7 @@ const ColorButton = withStyles((theme) => ({
       backgroundColor: "#16796F",
     },
     '&:disabled': {
-      backgroundColor: "#9CA89E",
+      backgroundColor: "#9EB7B4",
     },
   },
 }))(Button);
@@ -89,11 +89,15 @@ class SessionPage extends Component {
       username: "",
       hasName: false,
       existingUsers: [],
-      tempExternalID: ""
+      tempExternalID: "",
+      expDate: null,
+      tempExpDate: null
     };
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleSessionChange = this.handleSessionChange.bind(this);
     this.handleSessionSubmit = this.handleSessionSubmit.bind(this);
+    this.handleExpirationExtension = this.handleExpirationExtension.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
   }
 
   componentDidMount () {
@@ -118,7 +122,8 @@ class SessionPage extends Component {
         );
       })
       this.setState({
-        existingUsers: localExistingUsers
+        existingUsers: localExistingUsers,
+        expDate: doc.data().expirationDate.toDate()
       })
     });
   }
@@ -136,17 +141,21 @@ class SessionPage extends Component {
       this.setState({ hasName: true })
 
       var docRef = firebase.firestore().collection("sessions").doc(this.props.sessionID);
+      var trimmedName = this.state.username.trim();
+      this.setState({
+        username: trimmedName
+      })
 
       docRef.get().then((doc) => {
         if (doc.exists) {
           console.log("Document data:", doc.data());
-          if (doc.data().users.includes(this.state.username)) {
+          if (doc.data().users.includes(trimmedName)) {
             // Potentially special treatment for returning users (frontend things)
           }
 
           // This method only adds elements not already present
           return docRef.update({
-            users: firebase.firestore.FieldValue.arrayUnion(this.state.username)
+            users: firebase.firestore.FieldValue.arrayUnion(trimmedName)
           });
         } else {
           // doc.data() will be undefined in this case
@@ -154,6 +163,27 @@ class SessionPage extends Component {
         }
       });
     }
+  }
+
+  handleExpirationExtension() {
+    var newExpDate = this.state.tempExpDate;
+
+    // Check if newExpDate is before today or within 5 days from today
+
+    //update expirationDate on firestore
+    var docRef = firebase.firestore().collection("sessions").doc(this.props.sessionID);
+    docRef.get().then((doc) => {
+      console.log(newExpDate);
+      docRef.update({
+        expirationDate: firebase.firestore.Timestamp.fromDate(newExpDate)
+      }).then(() => {
+        console.log("expiration date has been changed to ", this.state.tempExpDate);
+      })
+    }).catch((error) => {});
+    //update state
+    this.setState({
+      expDate: newExpDate
+    })
   }
 
   resetName = () => {
@@ -181,11 +211,10 @@ class SessionPage extends Component {
         console.log("No such document!");
 
         // Create the document
-        firebase.firestore().collection("sessions").doc(this.props.sessionID)
-                            .collection("items").doc(currentInput).set({
-                              votes: [ this.state.username ],
-                              count: 1
-                            })
+        docRef.set({
+          votes: [ this.state.username ],
+          count: 1
+        })
         .then(() => {
             console.log("Document successfully written!");
         })
@@ -213,14 +242,14 @@ class SessionPage extends Component {
       return
     }
 
-    firebase.firestore().collection("sessions").doc(this.state.tempExternalID)
-      .get().then((doc) => {
-        if (doc.exists) {
+    var queryDB = firebase.firestore().collection("sessions").where("externalID", "==", this.state.tempExternalID);
+
+    queryDB.get().then((querySnapshot) => {
+        if (!querySnapshot.empty) {
           window.alert("This session ID is already being used. Please enter a new session ID.")
         } else {
-          firebase.firestore().collection("sessions")
-          .where("externalName", "==", this.state.tempExternalID).get().then((querySnapshot) => {
-            if (querySnapshot.empty) {
+          queryDB.get().then((innerQuerySnapshot) => {
+            if (innerQuerySnapshot.empty) {
               this.props.renameSession(this.state.tempExternalID)
             } else {
               window.alert("This session ID is already being used. Please enter a new session ID.")
@@ -233,7 +262,31 @@ class SessionPage extends Component {
     })
   }
 
+  handleDateChange = event => {
+    var inputDate = event.target.value;
+    console.log(inputDate);
+    var currDate = new Date();
+    currDate.setFullYear(inputDate.substring(0,4));
+    currDate.setMonth(parseInt(inputDate.substring(5,7)) - 1);
+    currDate.setDate(inputDate.substring(8));
+    console.log(currDate);
+    this.setState({
+      tempExpDate: currDate
+    })
+  }
+
+  dateToString = (date) => {
+    return date.getFullYear() + "-"
+            + ('0' + (date.getMonth() + 1)).slice(-2) + "-"
+            + ('0' + (date.getDate())).slice(-2);
+  }
+
   render() {
+    var tomorrow = new Date();
+    tomorrow.setDate((new Date()).getDate() + 1);
+
+    console.log(this.state.expDate);
+
     if (!this.state.hasName) {
       return(
         <React.Fragment>
@@ -294,6 +347,34 @@ class SessionPage extends Component {
             <br/>
             <div className="loginContainer">
               <h3>Change this What2Do</h3>
+              {this.state.expDate !== null
+              &&
+                <div>
+                  This session expires on
+                  <div className="child">
+                    <TextField
+                      id="date"
+                      type="date"
+                      onChange={this.handleDateChange}
+                      defaultValue={this.dateToString(this.state.expDate)}
+                      inputProps={{
+                        min: this.dateToString(tomorrow)
+                      }}
+                    />
+
+                  <ColorButton
+                    className ="color-button"
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    disableElevation
+                    onClick={ () => this.handleExpirationExtension() }> Update </ColorButton>
+                  </div>
+                  <br/>
+                </div>
+
+              }
+
               <form>
                 <CustomTextField id="changeExternalID" label="Change session ID:" variant="outlined" size="small"
                   onChange={this.handleSessionChange}
@@ -308,6 +389,7 @@ class SessionPage extends Component {
                   color="primary"
                   size="small"
                   disableElevation
+                  disabled={ this.state.tempExternalID === "" }
                   onClick={ this.handleSessionSubmit }>Submit</ColorButton>
               </form>
               <br/>

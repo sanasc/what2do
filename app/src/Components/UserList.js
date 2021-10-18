@@ -95,7 +95,7 @@ class UserList extends React.Component {
           Users in Current Session:
         </h3>
         <ul>
-          {this.state.users.map((eachUser) => {
+          {this.state.users.length == 0 ? "No users have joined." : this.state.users.map((eachUser) => {
             return (
               <li key={eachUser}>
                 {eachUser}

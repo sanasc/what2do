@@ -73,8 +73,10 @@ class App extends Component {
   componentDidMount () {
     const queryParams = new URLSearchParams(window.location.search);
     const URLName = queryParams.get('session');
+    var db = firebase.firestore().collection("sessions");
+
     if (URLName !== "" && URLName !== null) {
-      firebase.firestore().collection("sessions").where("externalID", "==", URLName).get().then((querySnapshot) => {
+      db.where("externalID", "==", URLName).get().then((querySnapshot) => {
         if (!querySnapshot.empty) {
           querySnapshot.forEach((doc) => {
             this.setState({
@@ -90,15 +92,25 @@ class App extends Component {
         }
       })
     }
-  }
 
-  componentWillUnmount() {
-    // get current timestamp
-
-    // access firebase
-
-    // if creationDate + validDays is before today
-    // then delete document
+    // check for expired sessions to delete
+    db.get().then((querySnapshot) => {
+      var today = new Date();
+      querySnapshot.forEach((doc) => {
+        if (doc.data().expirationDate.toDate() < today) {
+          db.doc(doc.id).collection("items").get().then((subQuerySnapshot) => {
+            subQuerySnapshot.forEach((subDoc) => {
+              subDoc.ref.delete().then(() => {
+                console.log("documents in subcollection of expired document has been deleted")
+              })
+            })
+          })
+          doc.ref.delete().then(() => {
+            console.log("expired documment has been deleted");
+          });
+        }
+      });
+    });
   }
 
   handleExternalIDChange = event => {
@@ -116,14 +128,18 @@ class App extends Component {
       return;
     }
 
-    firebase.firestore().collection("sessions").where("externalID", "==", this.state.tempExternalID).get().then((querySnapshot) => {
+    db.where("externalID", "==", this.state.tempExternalID).get().then((querySnapshot) => {
       if (!querySnapshot.empty){
         this.setState({sessionID: null})
         window.alert("This session ID already exists.\nPlease input a different session ID.")
       } else {
+        var expDate = new Date();
+        expDate.setDate(expDate.getDate() + 30);
+
         db.add({
           users: [],
-          externalID: ""
+          externalID: "",
+          expirationDate: firebase.firestore.Timestamp.fromDate(expDate)
         })
         .then((doc) => {
           console.log("Document successfully written! Doc.id: " + doc.id);
@@ -193,7 +209,7 @@ class App extends Component {
         {introText}
         <br/>
         <br/>
-        
+
         <ol className="instructionList">
           <strong>{walkthroughText}</strong>
           <li> Select a personalized URL or let What2Do generate one - this will be used to share & access your What2Do in the future!</li>
