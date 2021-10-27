@@ -286,6 +286,7 @@ class SessionPage extends Component {
     tomorrow.setDate((new Date()).getDate() + 1);
 
     console.log(this.state.expDate);
+    console.log(window.location.host + "/" + window.location.pathname + window.location.search);
 
     if (!this.state.hasName) {
       return(
