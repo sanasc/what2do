@@ -407,7 +407,7 @@ class SessionPage extends Component {
                 color="primary"
                 size="small"
                 disableElevation
-                onClick={ () => {navigator.clipboard.writeText(window.location.host + "/" + window.location.pathname + window.location.search)} }>
+                onClick={ () => {navigator.clipboard.writeText("https://" + window.location.host + window.location.pathname + window.location.search)} }>
                 Click to copy session link!
               </ColorButton>
             </div>
