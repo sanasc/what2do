@@ -249,9 +249,9 @@ class SessionPage extends Component {
           window.alert("This session ID is already being used. Please enter a new session ID.")
         } else {
           queryDB.get().then((innerQuerySnapshot) => {
-            if (innerQuerySnapshot.empty) {
-              this.props.renameSession(this.state.tempExternalID)
-            } else {
+            if (innerQuerySnapshot.empty && (window.confirm("Any links shared prior changing session ID will no longer be valid. Proceed?"))) {
+              this.props.renameSession(this.state.tempExternalID);
+            } else if (!innerQuerySnapshot.empty) {
               window.alert("This session ID is already being used. Please enter a new session ID.")
             }
           })

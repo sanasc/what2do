@@ -202,6 +202,7 @@ class App extends Component {
 
   Blurb(props) {
     var introText = "What2Do is a multipurpose polling tool designed to facilitate group decisions. Users can brainstorm ideas together, vote on their favorites, and then select the most popular option(s).";
+    var disclaimerText = "Note: Data for all polls is stored as plaintext and accessible by all system administrators.";
     var walkthroughText = "Here's how to get started:";
     // "To begin, select a personalized URL or let What2Do automatically generate one - this will be used to share & access your What2Do in the future! The next page shows ";
     return (
@@ -216,6 +217,8 @@ class App extends Component {
           <li> Create a username that will represent your votes</li>
           <li> Vote for existing items or add your own to the poll!</li>
         </ol>
+
+        {disclaimerText}
       </div>
     );
   }
