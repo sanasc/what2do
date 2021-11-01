@@ -1,4 +1,4 @@
-# what2do
+# [what2do](https://sanasc.github.io/what2do)
 What2Do is a multipurpose polling tool designed to facilitate group decisions. Users can brainstorm ideas together, vote on their favorites, and then select the most popular option(s).
 
 ![Overview of What2Do usage](https://github.com/sanasc/what2do/blob/main/app/misc/Intro.gif)
